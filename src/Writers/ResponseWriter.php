@@ -2,7 +2,7 @@
 
 namespace Hamlet\Http\Writers;
 
-use Hamlet\Http\Requests\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface ResponseWriter
 {
@@ -32,11 +32,11 @@ interface ResponseWriter
     public function end();
 
     /**
-     * @param Request $request
+     * @param ServerRequestInterface $request
      * @param array<string,string> $params
      * @return void
      */
-    public function session(Request $request, array $params);
+    public function session(ServerRequestInterface $request, array $params);
 
     /**
      * @param string $name

@@ -2,7 +2,7 @@
 
 namespace Hamlet\Http\Writers;
 
-use Hamlet\Http\Requests\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 class DefaultResponseWriter implements ResponseWriter
 {
@@ -35,10 +35,10 @@ class DefaultResponseWriter implements ResponseWriter
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequestInterface $request
      * @param array<string,string> $params
      */
-    public function session(Request $request, array $params)
+    public function session(ServerRequestInterface $request, array $params)
     {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
