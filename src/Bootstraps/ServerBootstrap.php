@@ -3,6 +3,7 @@
 namespace Hamlet\Http\Bootstraps;
 
 use Hamlet\Http\Applications\AbstractApplication;
+use Hamlet\Http\Requests\ExtendedRequest;
 use Hamlet\Http\Requests\Request;
 use Hamlet\Http\Writers\DefaultResponseWriter;
 
@@ -18,7 +19,7 @@ final class ServerBootstrap
      */
     public static function run(AbstractApplication $application)
     {
-        $request = Request::fromSuperGlobals($application->sessionHandler());
+        $request = ExtendedRequest::fromSuperGlobals($application->sessionHandler());
         $writer = new DefaultResponseWriter();
         $response = $application->run($request);
         $application->output($request, $response, $writer);

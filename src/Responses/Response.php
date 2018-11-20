@@ -82,9 +82,12 @@ class Response
     {
         $writer->status($this->statusCode, $this->getStatusLine());
 
+        /*
+         * @todo fix
         if (!empty($request->getSessionParams()) || !empty($this->sessionParams)) {
             $writer->session($request, $this->sessionParams);
         }
+        */
 
         foreach ($this->headers as $name => $values) {
             foreach ($values as $value) {
