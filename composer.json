@@ -19,10 +19,7 @@
     "hamlet-framework/http-message": "dev-master"
   },
   "require-dev": {
-    "phan/phan": "dev-master",
-    "phpstan/phpstan": "dev-master",
     "vimeo/psalm": "dev-master",
-    "phake/phake": "@stable",
     "phpunit/phpunit": "@stable",
     "squizlabs/php_codesniffer": "@stable",
     "monolog/monolog": "@stable",

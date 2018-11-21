@@ -7,65 +7,62 @@ use Hamlet\Http\Message\Stream;
 use Hamlet\Http\Message\Uri;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
-use SessionHandlerInterface;
 
-class ExtendedRequest extends ServerRequest implements Request
+class DefaultRequest extends ServerRequest implements Request
 {
-    /** @var string|null */
+    use RequestTrait;
+
+    /** @var string */
     protected $path;
 
     protected const HEADER_ALIASES = [
-        'CONTENT_TYPE'                => 'Content-Type',
-        'CONTENT_LENGTH'              => 'Content-Length',
-        'CONTENT_MD5'                 => 'Content-MD5',
-        'REDIRECT_HTTP_AUTHORIZATION' => 'Authorization',
-        'PHP_AUTH_DIGEST'             => 'Authorization',
-        'HTTP_HOST'                   => 'Host',
-        'HTTP_CONNECTION'             => 'Connection',
-        'HTTP_CACHE_CONTROL'          => 'Cache-Control',
+        'CONTENT_TYPE'                   => 'Content-Type',
+        'CONTENT_LENGTH'                 => 'Content-Length',
+        'CONTENT_MD5'                    => 'Content-MD5',
+        'REDIRECT_HTTP_AUTHORIZATION'    => 'Authorization',
+        'PHP_AUTH_DIGEST'                => 'Authorization',
+        'HTTP_HOST'                      => 'Host',
+        'HTTP_CONNECTION'                => 'Connection',
+        'HTTP_CACHE_CONTROL'             => 'Cache-Control',
         'HTTP_UPGRADE_INSECURE_REQUESTS' => 'Upgrade-Insecure-Requests',
-        'HTTP_USER_AGENT'             => 'User-Agent',
-        'HTTP_DNT'                    => 'DNT',
-        'HTTP_ACCEPT'                 => 'Accept',
-        'HTTP_ACCEPT_ENCODING'        => 'Accept-Encoding',
-        'HTTP_ACCEPT_LANGUAGE'        => 'Accept-Language',
-        'HTTP_COOKIE'                 => 'Cookie'
+        'HTTP_USER_AGENT'                => 'User-Agent',
+        'HTTP_DNT'                       => 'DNT',
+        'HTTP_ACCEPT'                    => 'Accept',
+        'HTTP_ACCEPT_ENCODING'           => 'Accept-Encoding',
+        'HTTP_ACCEPT_LANGUAGE'           => 'Accept-Language',
+        'HTTP_COOKIE'                    => 'Cookie'
     ];
 
-    public static function fromSuperGlobals(SessionHandlerInterface $sessionHandler = null): self
+    /**
+     * @psalm-suppress MixedTypeCoercion
+     */
+    public function __construct()
     {
-        $request = new static;
-        $request->method       = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $request->serverParams = &$_SERVER;
-        $request->cookieParams = &$_COOKIE;
-        $request->queryParams  = &$_GET;
-        $request->parsedBody   = &$_POST;
-        $request->path         = strtok((string) $_SERVER['REQUEST_URI'], '?') ?: '';
+        $this->method       = (string) ($_SERVER['REQUEST_METHOD'] ?? 'GET');
+        $this->serverParams = &$_SERVER;
+        $this->cookieParams = &$_COOKIE;
+        $this->queryParams  = &$_GET;
+        $this->parsedBody   = &$_POST;
+        $this->path         = strtok((string) $_SERVER['REQUEST_URI'], '?') ?: '';
 
-        $request->uriGenerator = function () {
+        $this->uriGenerator = function (): UriInterface {
             return self::readUriFromServerParams($_SERVER);
         };
-        $request->protocolVersionGenerator = function () {
-            return self::readVersionFromProtocol($_SERVER['SERVER_PROTOCOL']);
+        $this->protocolVersionGenerator = function (): string {
+            return self::readVersionFromServerParams($_SERVER);
         };
-        $request->headersGenerator = function () {
+        $this->headersGenerator = function (): array {
             return self::readHeadersFromServerParams($_SERVER);
         };
-        $request->bodyGenerator = function () {
+        $this->bodyGenerator = function (): StreamInterface {
             return self::readBodyFromInputStream('php://input');
         };
-
-        /*
-        @todo finish implementation
-
-        $request->generators['sessionParams']   = [[&$request, 'readSessionParams'], &$sessionHandler];
-        $request->generators['uploadedFiles']   = [[&$request, 'readUploadedFiles'], &$_FILES];
-        */
-
-        return $request;
+        $this->uploadedFilesGenerator = function (): array {
+            return self::readUploadedFilesFromFileParams($_FILES);
+        };
     }
 
-    public function getPath(): ?string
+    public function getPath(): string
     {
         if (!isset($this->path)) {
             $this->path = $this->getUri()->getPath();
@@ -73,11 +70,16 @@ class ExtendedRequest extends ServerRequest implements Request
         return $this->path;
     }
 
+    /**
+     * @param UriInterface $uri
+     * @param bool $preserveHost
+     * @return DefaultRequest
+     */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
         $copy = parent::withUri($uri, $preserveHost);
-        assert($copy instanceof ExtendedRequest);
-        $copy->path = null;
+        assert($copy instanceof DefaultRequest);
+        $copy->path = $uri->getPath();
         return $copy;
     }
 
@@ -90,6 +92,9 @@ class ExtendedRequest extends ServerRequest implements Request
      * @param string $name
      * @param string|null $default
      * @return string|array|null
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress LessSpecificImplementedReturnType
+     * @psalm-suppress MixedInferredReturnType
      */
     public function getQueryParam(string $name, string $default = null)
     {
@@ -149,9 +154,11 @@ class ExtendedRequest extends ServerRequest implements Request
     protected static function readHeadersFromServerParams(array $serverParams): array
     {
         if (\function_exists('getallheaders')) {
-            $headers = \getallheaders();
-            // @todo make sure headers have 'Host' at the top
-            // @todo make sure header values are wrapped into arrays
+            $headers = [];
+            /** @psalm-suppress MixedAssignment */
+            foreach (\getallheaders() as $name => $value) {
+                $headers[(string) $name] = [(string) $value];
+            }
             return $headers;
         }
 
@@ -177,9 +184,16 @@ class ExtendedRequest extends ServerRequest implements Request
         return $headers;
     }
 
-    protected static function readVersionFromProtocol(?string $protocol): string
+    protected static function readVersionFromServerParams(array $serverParams): string
     {
-        return $protocol !== null ? str_replace('HTTP/', '', $protocol) : '1.1';
+        if (isset($serverParams['SERVER_PROTOCOL'])) {
+            /** @psalm-suppress MixedAssignment */
+            $protocol = $serverParams['SERVER_PROTOCOL'];
+            if ($protocol) {
+                return str_replace('HTTP/', '', (string) $protocol);
+            }
+        }
+        return '1.1';
     }
 
     protected static function readBodyFromInputStream(string $path): StreamInterface
@@ -190,5 +204,11 @@ class ExtendedRequest extends ServerRequest implements Request
             return Stream::empty();
         }
         return Stream::fromResource($resource);
+    }
+
+    protected static function readUploadedFilesFromFileParams(array $files): array
+    {
+        // @todo finish parsing
+        return [];
     }
 }

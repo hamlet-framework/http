@@ -25,7 +25,7 @@ class RequestTest extends TestCase
 
     protected function serverRequest(): ServerRequestInterface
     {
-        return ExtendedRequest::empty();
+        return DefaultRequest::empty();
     }
 
     protected function message(): MessageInterface
@@ -50,7 +50,7 @@ class RequestTest extends TestCase
 
     public function test_path_changes_after_uri_set()
     {
-        $request = ExtendedRequest::empty()->withUri(Uri::parse('http://google.com/test?x=2'));
+        $request = DefaultRequest::empty()->withUri(Uri::parse('http://google.com/test?x=2'));
 
         Assert::assertSame('/test', $request->getPath());
     }

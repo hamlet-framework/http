@@ -20,6 +20,7 @@ abstract class AbstractEntity implements Entity
     /**
      * @param CacheItemPoolInterface $cache
      * @return CacheValue
+     * @psalm-suppress InvalidCatch
      */
     public function load(CacheItemPoolInterface $cache): CacheValue
     {
@@ -34,6 +35,7 @@ abstract class AbstractEntity implements Entity
         }
 
         if ($cacheItem->isHit()) {
+            /** @psalm-suppress MixedAssignment */
             $value = $cacheItem->get();
             if ($value instanceof CacheValue) {
                 $this->cacheValue = $value;
