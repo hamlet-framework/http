@@ -31,11 +31,7 @@ class StreamEntity extends AbstractEntity
         return \md5($this->getContent());
     }
 
-    /**
-     * Get media type
-     * @return string|null
-     */
-    public function getMediaType()
+    public function getMediaType(): ?string
     {
         return null;
     }

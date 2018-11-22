@@ -12,7 +12,7 @@ abstract class AbstractEntity implements Entity
     /** @var CacheValue|null */
     private $cacheValue = null;
 
-    public function getContentLanguage()
+    public function getContentLanguage(): ?string
     {
         return null;
     }

@@ -23,7 +23,7 @@ class PlainTextEntity extends AbstractEntity
         return $this->key;
     }
 
-    public function getMediaType()
+    public function getMediaType(): ?string
     {
         return "text/plain";
     }

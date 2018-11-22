@@ -16,7 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
-class RequestTest extends TestCase
+class DefaultRequestTest extends TestCase
 {
     use DataProviderTrait;
     use MessageTestTrait;
@@ -46,6 +46,11 @@ class RequestTest extends TestCase
     protected function uri(string $value): UriInterface
     {
         return Uri::parse($value);
+    }
+
+    public function test_defaults()
+    {
+        Assert::assertTrue(true);
     }
 
     public function test_path_changes_after_uri_set()

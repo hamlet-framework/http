@@ -8,20 +8,20 @@ interface Request extends ServerRequestInterface
 {
     public function getPath(): string;
 
-    public function hasQueryParam(string $name): bool;
+    public function hasParameter(string $name): bool;
 
     /**
      * @param string $name
-     * @param string|null $default
-     * @return string|array<string>|null
+     * @param mixed $default
+     * @return mixed
      */
-    public function getQueryParam(string $name, string $default = null);
+    public function parameter(string $name, $default = null);
 
     public function pathMatches(string $path): bool;
 
     /**
      * @param string $pattern
-     * @return string[]|bool
+     * @return array<string,string>|bool
      */
     public function pathMatchesPattern(string $pattern);
 
@@ -29,7 +29,7 @@ interface Request extends ServerRequestInterface
 
     /**
      * @param string $pattern
-     * @return string[]|bool
+     * @return array<string,string>|bool
      */
     public function pathStartsWithPattern(string $pattern);
 

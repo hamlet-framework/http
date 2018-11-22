@@ -38,10 +38,7 @@ abstract class AbstractApplication
         $response->output($request, $cacheProvider, $writer);
     }
 
-    /**
-     * @return SessionHandlerInterface|null
-     */
-    public function sessionHandler()
+    public function sessionHandler(): ?SessionHandlerInterface
     {
         return null;
     }

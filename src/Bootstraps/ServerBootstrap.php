@@ -4,7 +4,6 @@ namespace Hamlet\Http\Bootstraps;
 
 use Hamlet\Http\Applications\AbstractApplication;
 use Hamlet\Http\Requests\DefaultRequest;
-use Hamlet\Http\Requests\Request;
 use Hamlet\Http\Writers\DefaultResponseWriter;
 
 final class ServerBootstrap

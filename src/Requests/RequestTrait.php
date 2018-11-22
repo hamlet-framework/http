@@ -6,6 +6,33 @@ trait RequestTrait
 {
     abstract public function getPath(): string;
 
+    abstract public function getQueryParams(): array;
+
+    abstract public function getParsedBody();
+
+    public function hasParameter(string $name): bool
+    {
+        $body = $this->getParsedBody();
+        if (is_array($body) && isset($body[$name])) {
+            return true;
+        }
+        $params = $this->getQueryParams();
+        return isset($params[$name]);
+    }
+
+    public function parameter(string $name, $default = null)
+    {
+        $body = $this->getParsedBody();
+        if (is_array($body) && isset($body[$name])) {
+            return $body[$name];
+        }
+        $params = $this->getQueryParams();
+        if (isset($params[$name])) {
+            return $params[$name];
+        }
+        return $default;
+    }
+
     /**
      * Compare path tokens side by side. Returns false if no match, true if match without capture,
      * and array with matched tokens if used with capturing pattern
@@ -46,7 +73,7 @@ trait RequestTrait
 
     /**
      * @param string $pattern
-     * @return string[]|bool
+     * @return array<string,string>|bool
      */
     public function pathMatchesPattern(string $pattern)
     {
@@ -67,7 +94,7 @@ trait RequestTrait
 
     /**
      * @param string $pattern
-     * @return string[]|bool
+     * @return array<string,string>|bool
      */
     public function pathStartsWithPattern(string $pattern)
     {

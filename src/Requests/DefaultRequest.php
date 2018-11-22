@@ -33,17 +33,14 @@ class DefaultRequest extends ServerRequest implements Request
         'HTTP_COOKIE'                    => 'Cookie'
     ];
 
-    /**
-     * @psalm-suppress MixedTypeCoercion
-     */
     public function __construct()
     {
         $this->method       = (string) ($_SERVER['REQUEST_METHOD'] ?? 'GET');
-        $this->serverParams = &$_SERVER;
-        $this->cookieParams = &$_COOKIE;
-        $this->queryParams  = &$_GET;
-        $this->parsedBody   = &$_POST;
-        $this->path         = strtok((string) $_SERVER['REQUEST_URI'], '?') ?: '';
+        $this->serverParams = $_SERVER ?? [];
+        $this->cookieParams = $_COOKIE ?? [];
+        $this->queryParams  = $_GET ?? [];
+        $this->parsedBody   = $_POST ?? [];
+        $this->path         = strtok($_SERVER['REQUEST_URI'] ?? '', '?') ?: '';
 
         $this->uriGenerator = function (): UriInterface {
             return self::readUriFromServerParams($_SERVER);
@@ -81,24 +78,6 @@ class DefaultRequest extends ServerRequest implements Request
         assert($copy instanceof DefaultRequest);
         $copy->path = $uri->getPath();
         return $copy;
-    }
-
-    public function hasQueryParam(string $name): bool
-    {
-        return isset($this->getQueryParams()[$name]);
-    }
-
-    /**
-     * @param string $name
-     * @param string|null $default
-     * @return string|array|null
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress LessSpecificImplementedReturnType
-     * @psalm-suppress MixedInferredReturnType
-     */
-    public function getQueryParam(string $name, string $default = null)
-    {
-        return $this->getQueryParams()[$name] ?? $default;
     }
 
     /**
@@ -187,7 +166,6 @@ class DefaultRequest extends ServerRequest implements Request
     protected static function readVersionFromServerParams(array $serverParams): string
     {
         if (isset($serverParams['SERVER_PROTOCOL'])) {
-            /** @psalm-suppress MixedAssignment */
             $protocol = $serverParams['SERVER_PROTOCOL'];
             if ($protocol) {
                 return str_replace('HTTP/', '', (string) $protocol);
@@ -200,7 +178,7 @@ class DefaultRequest extends ServerRequest implements Request
     {
         $resource = fopen($path, 'r+');
         if ($resource === false) {
-            // @todo add logging
+            error_log('Cannot open stream for reading: ' . $path);
             return Stream::empty();
         }
         return Stream::fromResource($resource);

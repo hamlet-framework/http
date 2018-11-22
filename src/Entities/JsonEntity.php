@@ -24,7 +24,7 @@ class JsonEntity extends AbstractJsonEntity
     }
 
     /**
-     * Get the entity key, still important for 304 to use proper key
+     * Get the entity key, 304 response needs a proper key value
      * @return string
      */
     public function getKey(): string
@@ -35,9 +35,6 @@ class JsonEntity extends AbstractJsonEntity
         return $this->key;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         if ($this->content === null) {
