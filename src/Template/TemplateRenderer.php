@@ -1,6 +1,6 @@
 <?php
 
-namespace Hamlet\Http\Templating;
+namespace Hamlet\Http\Template;
 
 interface TemplateRenderer
 {

@@ -2,7 +2,7 @@
 
 namespace Hamlet\Http\Entities;
 
-use Hamlet\Http\Templating\TemplateRenderer;
+use Hamlet\Http\Template\TemplateRenderer;
 
 abstract class AbstractTemplateEntity extends AbstractEntity
 {

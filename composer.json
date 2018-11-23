@@ -15,7 +15,7 @@
     "ext-json": "@stable",
     "psr/log": "@stable",
     "psr/cache": "@stable",
-    "twig/twig": "@stable",
+    "mustache/mustache": "@stable",
     "hamlet-framework/http-message": "dev-master"
   },
   "require-dev": {

@@ -2,14 +2,14 @@
 
 namespace Hamlet\Http\Entities;
 
-use Hamlet\Http\Templating\TemplateRenderer;
-use Hamlet\Http\Templating\TwigRenderer;
+use Hamlet\Http\Template\MustacheRenderer;
+use Hamlet\Http\Template\TemplateRenderer;
 
-abstract class AbstractTwigEntity extends AbstractTemplateEntity
+abstract class AbstractMustacheEntity extends AbstractTemplateEntity
 {
     public function getTemplateRenderer(): TemplateRenderer
     {
-        return new TwigRenderer();
+        return new MustacheRenderer();
     }
 
     public function getMediaType(): string
