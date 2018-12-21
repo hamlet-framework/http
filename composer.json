@@ -20,6 +20,7 @@
   },
   "require-dev": {
     "vimeo/psalm": "dev-master",
+    "phpstan/phpstan": "dev-master",
     "phpunit/phpunit": "@stable",
     "squizlabs/php_codesniffer": "@stable",
     "monolog/monolog": "@stable",

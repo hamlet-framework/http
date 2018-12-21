@@ -33,8 +33,14 @@ class DefaultRequest extends ServerRequest implements Request
         'HTTP_COOKIE'                    => 'Cookie'
     ];
 
+    /**
+     * @psalm-suppress MixedTypeCoercion
+     * @psalm-suppress MixedArgument
+     */
     public function __construct()
     {
+        parent::__construct();
+
         $this->method       = (string) ($_SERVER['REQUEST_METHOD'] ?? 'GET');
         $this->serverParams = $_SERVER ?? [];
         $this->cookieParams = $_COOKIE ?? [];
@@ -166,6 +172,7 @@ class DefaultRequest extends ServerRequest implements Request
     protected static function readVersionFromServerParams(array $serverParams): string
     {
         if (isset($serverParams['SERVER_PROTOCOL'])) {
+            /** @psalm-suppress MixedAssignment */
             $protocol = $serverParams['SERVER_PROTOCOL'];
             if ($protocol) {
                 return str_replace('HTTP/', '', (string) $protocol);
