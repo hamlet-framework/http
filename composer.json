@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "php": "^7.2",
+    "php": ">= 7.2",
     "ext-json": "@stable",
     "psr/log": "@stable",
     "psr/cache": "@stable",
@@ -19,12 +19,12 @@
     "hamlet-framework/http-message": "dev-master"
   },
   "require-dev": {
-    "vimeo/psalm": "dev-master",
-    "phpstan/phpstan": "dev-master",
+    "hamlet-framework/http-message-spec": "dev-master",
     "phpunit/phpunit": "@stable",
     "squizlabs/php_codesniffer": "@stable",
-    "monolog/monolog": "@stable",
-    "hamlet-framework/http-message-spec": "dev-master"
+    "vimeo/psalm": "@stable",
+    "phpstan/phpstan": "@stable",
+    "monolog/monolog": "@stable"
   },
   "autoload": {
     "psr-4": {

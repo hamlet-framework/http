@@ -1,0 +1,17 @@
+language: php
+sudo: false
+
+php:
+  - '7.2'
+  - '7.3'
+  - nightly
+
+before_script:
+  - composer clear-cache
+  - composer update
+
+script:
+  - ./vendor/bin/phpunit --testdox
+  - ./vendor/bin/phpcs --standard=PSR2 -n src
+  - ./vendor/bin/psalm
+  - ./vendor/bin/phpstan analyse --level 7 src
