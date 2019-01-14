@@ -156,7 +156,8 @@ class DefaultRequest extends ServerRequest implements Request
                 continue;
             }
             if (isset(self::HEADER_ALIASES[$name])) {
-                $headers[self::HEADER_ALIASES[$name]][] = $value;
+                $alias = (string) self::HEADER_ALIASES[$name];
+                $headers[$alias][] = $value;
             } elseif (\substr($name, 0, 5) == "HTTP_") {
                 $headerName = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', \substr($name, 5)))));
                 $headers[$headerName][] = $value;
