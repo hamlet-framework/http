@@ -1,4 +1,3 @@
 parameters:
   ignoreErrors:
-    - "#Casting to string something that's already string.#"
     - "#Property .* \\(callable|null\\) does not accept Closure\\(\\): array.#"
