@@ -20,7 +20,7 @@
   },
   "require-dev": {
     "hamlet-framework/http-message-spec": "dev-master",
-    "phpunit/phpunit": "@stable",
+    "phpunit/phpunit": "^6 || ^7",
     "squizlabs/php_codesniffer": "@stable",
     "vimeo/psalm": "@stable",
     "phpstan/phpstan": "@stable",
