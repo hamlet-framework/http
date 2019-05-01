@@ -2,8 +2,6 @@
 
 namespace Hamlet\Http\Writers;
 
-use Psr\Http\Message\ServerRequestInterface;
-
 class DefaultResponseWriter implements ResponseWriter
 {
     /**
@@ -18,23 +16,45 @@ class DefaultResponseWriter implements ResponseWriter
         }
     }
 
-    public function header(string $key, string $value): void
+    /**
+     * @param string $key
+     * @param string $value
+     * @return void
+     */
+    public function header(string $key, string $value)
     {
         header($key . ': ' . $value);
     }
 
-    public function writeAndEnd(string $payload): void
+    /**
+     * @param string $payload
+     * @return void
+     */
+    public function writeAndEnd(string $payload)
     {
         echo $payload;
         exit;
     }
 
-    public function end(): void
+    /**
+     * @return void
+     */
+    public function end()
     {
         exit;
     }
 
-    public function cookie(string $name, string $value, int $expires, string $path, string $domain = '', bool $secure = false, bool $httpOnly = false): void
+    /**
+     * @param string $name
+     * @param string $value
+     * @param int $expires
+     * @param string $path
+     * @param string $domain
+     * @param bool $secure
+     * @param bool $httpOnly
+     * @return void
+     */
+    public function cookie(string $name, string $value, int $expires, string $path, string $domain = '', bool $secure = false, bool $httpOnly = false)
     {
         setcookie($name, $value, $expires, $path, $domain, $secure, $httpOnly);
     }

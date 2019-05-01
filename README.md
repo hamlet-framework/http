@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/hamlet-framework/http.svg?branch=master)](https://travis-ci.org/hamlet-framework/http)
-
 # Hamlet / HTTP
+
+[![Build Status](https://travis-ci.org/hamlet-framework/http.svg?branch=master)](https://travis-ci.org/hamlet-framework/http)
 
 ## Todo
 
 - Add more tests
-- Extract Twig templating to a separate project
+- Finish the request object
