@@ -15,7 +15,7 @@ class DefaultRequest extends ServerRequest implements Request
     /** @var string */
     protected $path;
 
-    protected const HEADER_ALIASES = [
+    const HEADER_ALIASES = [
         'CONTENT_TYPE'                   => 'Content-Type',
         'CONTENT_LENGTH'                 => 'Content-Length',
         'CONTENT_MD5'                    => 'Content-MD5',
