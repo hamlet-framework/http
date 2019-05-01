@@ -10,6 +10,7 @@
       "email": "info@kartashov.com"
     }
   ],
+  "minimum-stability": "dev",
   "require": {
     "php": "^7",
     "ext-json": "@stable",
@@ -23,7 +24,6 @@
     "phpunit/phpunit": "^6 || ^7",
     "squizlabs/php_codesniffer": "@stable",
     "vimeo/psalm": "@stable",
-    "phpstan/phpstan": "@stable",
     "monolog/monolog": "@stable"
   },
   "autoload": {
