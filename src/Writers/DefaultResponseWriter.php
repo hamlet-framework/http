@@ -6,7 +6,12 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class DefaultResponseWriter implements ResponseWriter
 {
-    public function status(int $code, string $line = null): void
+    /**
+     * @param int $code
+     * @param string|null $line
+     * @return void
+     */
+    public function status(int $code, string $line = null)
     {
         if ($line !== null) {
             header($line);

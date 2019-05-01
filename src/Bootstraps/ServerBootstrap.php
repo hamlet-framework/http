@@ -12,7 +12,11 @@ final class ServerBootstrap
     {
     }
 
-    public static function run(AbstractApplication $application): void
+    /**
+     * @param AbstractApplication $application
+     * @return void
+     */
+    public static function run(AbstractApplication $application)
     {
         $request = new DefaultRequest();
         $writer = new DefaultResponseWriter();

@@ -11,13 +11,20 @@ class WrapperResponseWriter implements ResponseWriter
 {
     use ResponseWriterTrait;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $statusCode = 200;
 
-    /** @var array<string,array<string>> */
+    /**
+     * @var array
+     * @psalm-var array<string,array<string>>
+     */
     private $headers = [];
 
-    /** @var StreamInterface|null */
+    /**
+     * @var StreamInterface|null
+     */
     private $body;
 
     public function __construct()
@@ -25,22 +32,39 @@ class WrapperResponseWriter implements ResponseWriter
         $this->headers['Server'] = ['Hamlet'];
     }
 
-    public function status(int $code, string $line = null): void
+    /**
+     * @param int $code
+     * @param string|null $line
+     * @return void
+     */
+    public function status(int $code, string $line = null)
     {
         $this->statusCode = $code;
     }
 
-    public function header(string $key, string $value): void
+    /**
+     * @param string $key
+     * @param string $value
+     * @return void
+     */
+    public function header(string $key, string $value)
     {
         $this->headers[$key][] = $value;
     }
 
-    public function writeAndEnd(string $payload): void
+    /**
+     * @param string $payload
+     * @return void
+     */
+    public function writeAndEnd(string $payload)
     {
         $this->body = Stream::fromString($payload);
     }
 
-    public function end(): void
+    /**
+     * @return void
+     */
+    public function end()
     {
     }
 

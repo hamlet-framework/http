@@ -22,7 +22,7 @@ interface Entity
      * Get content language
      * @return string|null
      */
-    public function getContentLanguage(): ?string;
+    public function getContentLanguage();
 
     /**
      * Get cache key of the entity
@@ -34,7 +34,7 @@ interface Entity
      * Get media type
      * @return string|null
      */
-    public function getMediaType(): ?string;
+    public function getMediaType();
 
     /**
      * Load entity from cache or generate it

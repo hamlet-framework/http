@@ -9,10 +9,15 @@ use RuntimeException;
 
 abstract class AbstractEntity implements Entity
 {
-    /** @var CacheValue|null */
+    /**
+     * @var CacheValue|null
+     */
     private $cacheValue = null;
 
-    public function getContentLanguage(): ?string
+    /**
+     * @return string|null
+     */
+    public function getContentLanguage()
     {
         return null;
     }

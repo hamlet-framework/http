@@ -24,7 +24,13 @@ abstract class AbstractApplication
 
     abstract protected function getCache(Request $request): CacheItemPoolInterface;
 
-    public function output(Request $request, Response $response, ResponseWriter $writer): void
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param ResponseWriter $writer
+     * @return void
+     */
+    public function output(Request $request, Response $response, ResponseWriter $writer)
     {
         $cacheProvider = function () use ($request): CacheItemPoolInterface {
             return $this->getCache($request);
