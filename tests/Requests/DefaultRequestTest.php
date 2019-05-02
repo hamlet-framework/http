@@ -190,6 +190,15 @@ class DefaultRequestTest extends TestCase
         Assert::assertTrue(true);
     }
 
+    public function test_has_query_param()
+    {
+        $request = DefaultRequest::empty()
+            ->withQueryParams(['id' => '12']);
+
+        Assert::assertTrue($request->hasQueryParam('id'));
+        Assert::assertFalse($request->hasQueryParam('name'));
+    }
+
     public function test_get_query_param_casts_value()
     {
         $request = DefaultRequest::empty()
@@ -207,6 +216,15 @@ class DefaultRequestTest extends TestCase
             ->withQueryParams(['id' => '1']);
 
         $request->getQueryParam('id', _class(\DateTime::class));
+    }
+
+    public function test_has_body_param()
+    {
+        $request = DefaultRequest::empty()
+            ->withParsedBody(['id' => '12']);
+
+        Assert::assertTrue($request->hasBodyParam('id'));
+        Assert::assertFalse($request->hasBodyParam('name'));
     }
 
     public function test_get_body_param_casts_value()
