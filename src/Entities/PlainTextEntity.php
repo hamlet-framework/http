@@ -6,10 +6,14 @@ use function md5;
 
 class PlainTextEntity extends AbstractEntity
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $data;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $key = null;
 
     public function __construct(string $data)

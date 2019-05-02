@@ -9,7 +9,6 @@ use Hamlet\Http\Writers\ResponseWriter;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SessionHandlerInterface;
 
 abstract class AbstractApplication
 {
@@ -36,11 +35,6 @@ abstract class AbstractApplication
             return $this->getCache($request);
         };
         $response->output($request, $cacheProvider, $writer);
-    }
-
-    public function sessionHandler(): ?SessionHandlerInterface
-    {
-        return null;
     }
 
     public function logger(): LoggerInterface

@@ -7,7 +7,9 @@ use Hamlet\Http\Responses\Response;
 
 class BasicResource implements HttpResource
 {
-    /** @var Response */
+    /**
+     * @var Response
+     */
     protected $response;
 
     public function __construct(Response $response)

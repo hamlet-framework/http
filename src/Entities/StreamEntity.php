@@ -7,10 +7,14 @@ use function md5;
 
 class StreamEntity extends AbstractEntity
 {
-    /** @var StreamInterface */
+    /**
+     * @var StreamInterface
+     */
     private $stream;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $content = null;
 
     public function __construct(StreamInterface $stream)

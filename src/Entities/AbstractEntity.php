@@ -42,6 +42,8 @@ abstract class AbstractEntity implements Entity
         if ($cacheItem->isHit()) {
             /** @psalm-suppress MixedAssignment */
             $value = $cacheItem->get();
+            assert($value instanceof CacheValue);
+            /** @psalm-suppress RedundantConditionGivenDocblockType */
             if ($value instanceof CacheValue) {
                 $this->cacheValue = $value;
             }

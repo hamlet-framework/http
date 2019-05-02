@@ -2,13 +2,11 @@
 
 namespace Hamlet\Http\Requests;
 
-use Hamlet\Cast\Type;
 use Hamlet\Http\Message\ServerRequest;
 use Hamlet\Http\Message\Stream;
 use Hamlet\Http\Message\UploadedFile;
 use Hamlet\Http\Message\Uri;
 use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 use function base64_encode;
 use function function_exists;
@@ -81,48 +79,6 @@ class DefaultRequest extends ServerRequest implements Request
             $this->path = $this->getUri()->getPath();
         }
         return $this->path;
-    }
-
-    public function hasQueryParam(string $name): bool
-    {
-        $params = $this->getQueryParams();
-        return array_key_exists($name, $params);
-    }
-
-    public function hasBodyParam(string $name): bool
-    {
-        $param = $this->getParsedBody();
-        return is_array($param) && array_key_exists($name, $param);
-    }
-
-    /**
-     * @template T
-     * @param string $name
-     * @param Type $type
-     * @psalm-param Type<T> $type
-     * @return mixed
-     * @psalm-return T
-     */
-    public function getQueryParam(string $name, Type $type)
-    {
-        $params = $this->getQueryParams();
-        assert(array_key_exists($name, $params));
-        return $type->cast($params[$name]);
-    }
-
-    /**
-     * @template T
-     * @param string $name
-     * @param Type $type
-     * @psalm-param Type<T> $type
-     * @return mixed
-     * @psalm-return T
-     */
-    public function getBodyParam(string $name, Type $type)
-    {
-        $params = $this->getParsedBody();
-        assert(is_array($params) && array_key_exists($name, $params));
-        return $type->cast($params[$name]);
     }
 
     /**

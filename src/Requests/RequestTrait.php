@@ -4,6 +4,7 @@ namespace Hamlet\Http\Requests;
 
 use function count;
 use function explode;
+use Hamlet\Cast\Type;
 use function strlen;
 use function substr;
 use function urldecode;
@@ -37,6 +38,48 @@ trait RequestTrait
             return $params[$name];
         }
         return $default;
+    }
+
+    public function hasQueryParam(string $name): bool
+    {
+        $params = $this->getQueryParams();
+        return array_key_exists($name, $params);
+    }
+
+    public function hasBodyParam(string $name): bool
+    {
+        $param = $this->getParsedBody();
+        return is_array($param) && array_key_exists($name, $param);
+    }
+
+    /**
+     * @template T
+     * @param string $name
+     * @param Type $type
+     * @psalm-param Type<T> $type
+     * @return mixed
+     * @psalm-return T
+     */
+    public function getQueryParam(string $name, Type $type)
+    {
+        $params = $this->getQueryParams();
+        assert(array_key_exists($name, $params));
+        return $type->cast($params[$name]);
+    }
+
+    /**
+     * @template T
+     * @param string $name
+     * @param Type $type
+     * @psalm-param Type<T> $type
+     * @return mixed
+     * @psalm-return T
+     */
+    public function getBodyParam(string $name, Type $type)
+    {
+        $params = $this->getParsedBody();
+        assert(is_array($params) && array_key_exists($name, $params));
+        return $type->cast($params[$name]);
     }
 
     /**

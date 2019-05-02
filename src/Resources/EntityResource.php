@@ -10,10 +10,14 @@ use Hamlet\Http\Responses\OKOrNotModifiedResponse;
 
 class EntityResource implements HttpResource
 {
-    /** @var Entity */
+    /**
+     * @var Entity
+     */
     protected $entity;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected $methods;
 
     public function __construct(Entity $entity, string ... $methods)

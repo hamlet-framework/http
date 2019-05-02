@@ -4,22 +4,34 @@ namespace Hamlet\Http\Cache;
 
 class CacheValue
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $content;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $tag;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $digest;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $length;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $modified;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $expiry;
 
     public function __construct(string $content, int $modified, int $expiry)
