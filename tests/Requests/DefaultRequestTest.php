@@ -17,6 +17,8 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use ReflectionClass;
 use ReflectionException;
+use function Hamlet\Cast\_class;
+use function Hamlet\Cast\_int;
 
 class DefaultRequestTest extends TestCase
 {
@@ -62,6 +64,10 @@ class DefaultRequestTest extends TestCase
         Assert::assertSame('/test', $request->getPath());
     }
 
+    /**
+     * adopted from guzzle/psr7
+     * @return array
+     */
     public function files_structure()
     {
         return [
@@ -182,5 +188,43 @@ class DefaultRequestTest extends TestCase
         $method = $type->getMethod('readUploadedFilesFromFileParams');
         $method->setAccessible(true);
         Assert::assertTrue(true);
+    }
+
+    public function test_get_query_param_casts_value()
+    {
+        $request = DefaultRequest::empty()
+            ->withQueryParams(['id' => '12']);
+
+        Assert::assertSame(12, $request->getQueryParam('id', _int()));
+    }
+
+    /**
+     * @expectedException \Hamlet\Cast\CastException
+     */
+    public function test_get_query_param_throws_exception_on_impossible_cast()
+    {
+        $request = DefaultRequest::empty()
+            ->withQueryParams(['id' => '1']);
+
+        $request->getQueryParam('id', _class(\DateTime::class));
+    }
+
+    public function test_get_body_param_casts_value()
+    {
+        $request = DefaultRequest::empty()
+            ->withParsedBody(['id' => '12']);
+
+        Assert::assertSame(12, $request->getBodyParam('id', _int()));
+    }
+
+    /**
+     * @expectedException \Hamlet\Cast\CastException
+     */
+    public function test_get_body_param_throws_exception_on_impossible_cast()
+    {
+        $request = DefaultRequest::empty()
+            ->withParsedBody(['id' => '1']);
+
+        $request->getBodyParam('id', _class(\DateTime::class));
     }
 }

@@ -10,17 +10,22 @@
       "email": "info@kartashov.com"
     }
   ],
-  "minimum-stability": "dev",
+  "config": {
+    "optimize-autoloader": true,
+    "classmap-authoritative": true,
+    "sort-packages": true
+  },
   "require": {
     "php": "^7",
     "ext-json": "@stable",
     "psr/log": "@stable",
     "psr/cache": "@stable",
     "mustache/mustache": "@stable",
-    "hamlet-framework/http-message": "dev-master"
+    "hamlet-framework/http-message": "@stable",
+    "hamlet-framework/type": "@stable"
   },
   "require-dev": {
-    "hamlet-framework/http-message-spec": "dev-master",
+    "hamlet-framework/http-message-spec": "@stable",
     "phpunit/phpunit": "^6 || ^7",
     "squizlabs/php_codesniffer": "@stable",
     "vimeo/psalm": "@stable",

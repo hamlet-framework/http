@@ -5,4 +5,4 @@
 ## Todo
 
 - Add more tests
-
+- Add plain text response writer and use it to test different types of responses, especially codes etc.

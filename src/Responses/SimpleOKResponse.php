@@ -19,7 +19,8 @@ class SimpleOKResponse extends Response
 
     /**
      * @param Request $request
-     * @param callable():\Psr\Cache\CacheItemPoolInterface $cacheProvider
+     * @param callable $cacheProvider
+     * @psalm-param callable():\Psr\Cache\CacheItemPoolInterface $cacheProvider
      * @param ResponseWriter $writer
      */
     public function output(Request $request, callable $cacheProvider, ResponseWriter $writer)
