@@ -11,10 +11,14 @@ class WrapperRequest implements Request
 {
     use RequestTrait;
 
-    /** @var ServerRequestInterface */
+    /**
+     * @var ServerRequestInterface
+     */
     private $serverRequest;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $path = null;
 
     public function __construct(ServerRequestInterface $serverRequest)

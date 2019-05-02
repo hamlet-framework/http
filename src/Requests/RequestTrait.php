@@ -2,6 +2,12 @@
 
 namespace Hamlet\Http\Requests;
 
+use function count;
+use function explode;
+use function strlen;
+use function substr;
+use function urldecode;
+
 trait RequestTrait
 {
     abstract public function getPath(): string;
@@ -45,7 +51,7 @@ trait RequestTrait
     protected function matchTokens(array $pathTokens, array $patternTokens)
     {
         $matches = [];
-        for ($i = 1; $i < \count($patternTokens); $i++) {
+        for ($i = 1; $i < count($patternTokens); $i++) {
             $pathToken = $pathTokens[$i];
             $patternToken = $patternTokens[$i];
             if ($pathToken == '' && $patternToken != '') {
@@ -54,9 +60,9 @@ trait RequestTrait
             if ($patternToken == '*') {
                 continue;
             }
-            if (\substr($patternToken, 0, 1) == '{') {
-                $matches[\substr($patternToken, 1, -1)] = \urldecode($pathToken);
-            } else if (\urldecode($pathToken) != $patternToken) {
+            if (substr($patternToken, 0, 1) == '{') {
+                $matches[substr($patternToken, 1, -1)] = urldecode($pathToken);
+            } else if (urldecode($pathToken) != $patternToken) {
                 return false;
             }
         }
@@ -78,9 +84,9 @@ trait RequestTrait
     public function pathMatchesPattern(string $pattern)
     {
         $path = $this->getPath();
-        $pathTokens = \explode('/', $path);
-        $patternTokens = \explode('/', $pattern);
-        if (\count($pathTokens) != \count($patternTokens)) {
+        $pathTokens = explode('/', $path);
+        $patternTokens = explode('/', $pattern);
+        if (count($pathTokens) != count($patternTokens)) {
             return false;
         }
         return $this->matchTokens($pathTokens, $patternTokens);
@@ -89,7 +95,7 @@ trait RequestTrait
     public function pathStartsWith(string $prefix): bool
     {
         $path = $this->getPath();
-        return \substr($path, 0, \strlen($prefix)) == $prefix;
+        return substr($path, 0, strlen($prefix)) == $prefix;
     }
 
     /**

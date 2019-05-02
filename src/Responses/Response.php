@@ -14,46 +14,54 @@ use Psr\Http\Message\ResponseInterface;
  */
 class Response
 {
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $statusCode = 0;
 
-    /** @var array<string,array<string>> */
+    /**
+     * @var array
+     * @psalm-var array<string,array<string>>
+     */
     protected $headers = [];
 
-    /** @var Entity|null */
+    /**
+     * @var Entity|null
+     */
     protected $entity;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     protected $embedEntity = true;
 
-    /** @var Cookie[]  */
+    /**
+     * @var Cookie[]
+     * @psalm-var array<Cookie>
+     */
     protected $cookies = [];
 
-    /** @var array<string,string> */
-    protected $sessionParams = [];
-
     /**
-     * @param int $statusCode
-     * @param Entity|null $entity
-     * @param bool $embedEntity
-     * @param array<string,array<string>> $headers
-     * @param Cookie[] $cookies
-     * @param array<string,string> $session
+     * @param int                               $statusCode
+     * @param Entity|null                       $entity
+     * @param bool                              $embedEntity
+     * @param array                             $headers
+     * @psalm-param array<string,array<string>> $headers
+     * @param Cookie[]                          $cookies
+     * @psalm-param array<Cookie>               $cookies
      */
     protected function __construct(
         int $statusCode = 0,
         $entity = null,
         $embedEntity = true,
         array $headers = [],
-        array $cookies = [],
-        array $session = []
+        array $cookies = []
     ) {
         $this->statusCode    = $statusCode;
         $this->entity        = $entity;
         $this->embedEntity   = $embedEntity;
         $this->headers       = $headers;
         $this->cookies       = $cookies;
-        $this->sessionParams = $session;
     }
 
     public static function fromResponseInterface(ResponseInterface $response): Response
@@ -73,21 +81,15 @@ class Response
     }
 
     /**
-     * @param Request $request
-     * @param callable():\Psr\Cache\CacheItemPoolInterface $cacheProvider
-     * @param ResponseWriter $writer
+     * @param Request                                            $request
+     * @param callable                                           $cacheProvider
+     * @psalm-param callable():\Psr\Cache\CacheItemPoolInterface $cacheProvider
+     * @param ResponseWriter                                     $writer
      * @return void
      */
     public function output(Request $request, callable $cacheProvider, ResponseWriter $writer)
     {
         $writer->status($this->statusCode, $this->getStatusLine());
-
-        /*
-         * @todo fix
-        if (!empty($request->getSessionParams()) || !empty($this->sessionParams)) {
-            $writer->session($request, $this->sessionParams);
-        }
-        */
 
         foreach ($this->headers as $name => $values) {
             foreach ($values as $value) {

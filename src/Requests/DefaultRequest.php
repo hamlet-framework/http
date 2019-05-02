@@ -4,9 +4,17 @@ namespace Hamlet\Http\Requests;
 
 use Hamlet\Http\Message\ServerRequest;
 use Hamlet\Http\Message\Stream;
+use Hamlet\Http\Message\UploadedFile;
 use Hamlet\Http\Message\Uri;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
+use function base64_encode;
+use function function_exists;
+use function str_replace;
+use function strtolower;
+use function substr;
+use function ucwords;
 
 class DefaultRequest extends ServerRequest implements Request
 {
@@ -139,10 +147,11 @@ class DefaultRequest extends ServerRequest implements Request
      */
     protected static function readHeadersFromServerParams(array $serverParams): array
     {
-        if (\function_exists('getallheaders')) {
+        if (function_exists('getallheaders')) {
             $headers = [];
+            /** @noinspection PhpComposerExtensionStubsInspection */
             /** @psalm-suppress MixedAssignment */
-            foreach (\getallheaders() as $name => $value) {
+            foreach (getallheaders() as $name => $value) {
                 $headers[(string) $name] = [(string) $value];
             }
             return $headers;
@@ -159,26 +168,23 @@ class DefaultRequest extends ServerRequest implements Request
             if (isset(self::HEADER_ALIASES[$name])) {
                 $alias = (string) self::HEADER_ALIASES[$name];
                 $headers[$alias][] = $value;
-            } elseif (\substr($name, 0, 5) == "HTTP_") {
-                $headerName = \str_replace(' ', '-', \ucwords(\strtolower(\str_replace('_', ' ', \substr($name, 5)))));
+            } elseif (substr($name, 0, 5) == "HTTP_") {
+                $headerName = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
                 $headers[$headerName][] = $value;
             }
         }
         if (!isset($headers['Authorization']) && isset($serverParams['PHP_AUTH_USER'])) {
             $password = $serverParams['PHP_AUTH_PW'] ?? '';
-            $headers['Authorization'] = ['Basic ' . \base64_encode($serverParams['PHP_AUTH_USER'] . ':' . $password)];
+            $headers['Authorization'] = ['Basic ' . base64_encode($serverParams['PHP_AUTH_USER'] . ':' . $password)];
         }
         return $headers;
     }
 
     protected static function readVersionFromServerParams(array $serverParams): string
     {
-        if (isset($serverParams['SERVER_PROTOCOL'])) {
-            /** @psalm-suppress MixedAssignment */
-            $protocol = $serverParams['SERVER_PROTOCOL'];
-            if ($protocol) {
-                return str_replace('HTTP/', '', (string) $protocol);
-            }
+        if (!empty($serverParams['SERVER_PROTOCOL'])) {
+            $protocol = (string) $serverParams['SERVER_PROTOCOL'];
+            return str_replace('HTTP/', '', (string) $protocol);
         }
         return '1.1';
     }
@@ -193,9 +199,46 @@ class DefaultRequest extends ServerRequest implements Request
         return Stream::fromResource($resource);
     }
 
+    /**
+     * @param array $files
+     * @return array
+     * @psalm-return array<string,UploadedFileInterface|array>
+     * @psalm-suppress MixedArgument
+     * @psalm-suppress MixedArrayAccess
+     * @psalm-suppress MixedArrayOffset
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedReturnTypeCoercion
+     */
     protected static function readUploadedFilesFromFileParams(array $files): array
     {
-        // @todo finish parsing
-        return [];
+        $result = [];
+        foreach ($files as $key => $value) {
+            if (isset($value['tmp_name'])) {
+                if (is_array($value['tmp_name'])) {
+                    $nestedFiles = [];
+                    foreach ($value['tmp_name'] as $nestedKey => $_) {
+                        $nestedFiles[] = [
+                            'tmp_name' => $value['tmp_name'][$nestedKey],
+                            'size'     => $value['size'][$nestedKey],
+                            'error'    => $value['error'][$nestedKey],
+                            'name'     => $value['name'][$nestedKey],
+                            'type'     => $value['type'][$nestedKey],
+                        ];
+                    }
+                    $result[$key] = self::readUploadedFilesFromFileParams($nestedFiles);
+                } else {
+                    $result[$key] = UploadedFile::builder()
+                        ->withPath($value['tmp_name'])
+                        ->withSize($value['size'])
+                        ->withErrorStatus($value['error'])
+                        ->withClientFileName($value['name'])
+                        ->withClientMediaType($value['type'])
+                        ->build();
+                }
+            } else {
+                $result[$key] = self::readUploadedFilesFromFileParams($value);
+            }
+        }
+        return $result;
     }
 }

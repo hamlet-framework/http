@@ -4,6 +4,11 @@ namespace Hamlet\Http\Requests;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use function array_keys;
+use function array_merge;
+use function array_reduce;
+use function arsort;
+use function explode;
 
 final class RequestUtils
 {
@@ -50,17 +55,17 @@ final class RequestUtils
              * @return array<string,float>
              */
             function (array $acc, string $element): array {
-                list($l, $q) = \array_merge(\explode(';q=', $element), ['1']);
+                list($l, $q) = array_merge(explode(';q=', $element), ['1']);
                 $acc[trim($l)] = (float) $q;
                 return $acc;
             };
 
         foreach ($headers as $header) {
-            $tokens = \explode(',', $header);
+            $tokens = explode(',', $header);
             /** @var array<string,float> $weights */
-            $weights = \array_reduce($tokens, $reducer, $weights);
+            $weights = array_reduce($tokens, $reducer, $weights);
         };
-        \arsort($weights);
-        return \array_keys($weights);
+        arsort($weights);
+        return array_keys($weights);
     }
 }

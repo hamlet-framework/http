@@ -3,6 +3,10 @@
 namespace Hamlet\Http\Entities;
 
 use RuntimeException;
+use function json_encode;
+use function json_last_error;
+use function json_last_error_msg;
+use function md5;
 
 class JsonEntity extends AbstractJsonEntity
 {
@@ -30,7 +34,7 @@ class JsonEntity extends AbstractJsonEntity
     public function getKey(): string
     {
         if ($this->key === null) {
-            $this->key = \md5($this->getContent());
+            $this->key = md5($this->getContent());
         }
         return $this->key;
     }
@@ -38,9 +42,9 @@ class JsonEntity extends AbstractJsonEntity
     public function getContent(): string
     {
         if ($this->content === null) {
-            $content = \json_encode($this->data);
+            $content = json_encode($this->data);
             if ($content === false) {
-                throw new RuntimeException(\json_last_error_msg(), \json_last_error());
+                throw new RuntimeException(json_last_error_msg(), json_last_error());
             }
             $this->content = $content;
         }

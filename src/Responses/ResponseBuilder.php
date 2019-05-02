@@ -7,20 +7,27 @@ use RuntimeException;
 
 class ResponseBuilder
 {
-    /** @var int|null */
+    /**
+     * @var int|null
+     */
     private $statusCode;
 
-    /** @var Entity|null */
+    /**
+     * @var Entity|null
+     */
     private $entity;
 
-    /** @var array<string,array<string>> */
+    /**
+     * @var array
+     * @psalm-var array<string,array<string>>
+     */
     private $headers = [];
 
-    /** @var Cookie[] */
+    /**
+     * @var Cookie[]
+     * @psalm-var array<Cookie>
+     */
     private $cookies = [];
-
-    /** @var array<string,string> */
-    private $sessionParams = [];
 
     private function __construct()
     {
@@ -55,30 +62,26 @@ class ResponseBuilder
         return $this;
     }
 
-    public function withSessionParam(string $name, string $value): ResponseBuilder
-    {
-        $this->sessionParams[$name] = $value;
-        return $this;
-    }
 
     public function build(): Response
     {
         if ($this->statusCode == null) {
             throw new RuntimeException('Status code needs to be defined');
         }
-        return new class($this->statusCode, $this->entity,  $this->entity !== null, $this->headers, $this->cookies, $this->sessionParams) extends Response
+        return new class($this->statusCode, $this->entity,  $this->entity !== null, $this->headers, $this->cookies) extends Response
         {
             /**
-             * @param int $statusCode
-             * @param Entity|null $entity
-             * @param bool $embedEntity
-             * @param array<string,array<string>> $headers
-             * @param Cookie[] $cookies
-             * @param array<string,string> $sessionParams
+             * @param int                               $statusCode
+             * @param Entity|null                       $entity
+             * @param bool                              $embedEntity
+             * @param array                             $headers
+             * @psalm-param array<string,array<string>> $headers
+             * @param Cookie[]                          $cookies
+             * @psalm-param array<Cookie>               $cookies
              */
-            public function __construct($statusCode, $entity, $embedEntity, array $headers, array $cookies, array $sessionParams)
+            public function __construct($statusCode, $entity, $embedEntity, array $headers, array $cookies)
             {
-                parent::__construct($statusCode, $entity, $embedEntity, $headers, $cookies, $sessionParams);
+                parent::__construct($statusCode, $entity, $embedEntity, $headers, $cookies);
             }
         };
     }

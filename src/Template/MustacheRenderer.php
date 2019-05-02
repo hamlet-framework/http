@@ -8,10 +8,14 @@ use Mustache_Template;
 
 class MustacheRenderer implements TemplateRenderer
 {
-    /** @var Mustache_Engine */
+    /**
+     * @var Mustache_Engine
+     */
     private $engine;
 
-    /** @var Mustache_Template[] */
+    /**
+     * @var Mustache_Template[]
+     */
     private $templates = [];
 
     public function __construct()

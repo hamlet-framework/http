@@ -3,6 +3,7 @@
 namespace Hamlet\Http\Entities;
 
 use Psr\Http\Message\StreamInterface;
+use function md5;
 
 class StreamEntity extends AbstractEntity
 {
@@ -28,7 +29,7 @@ class StreamEntity extends AbstractEntity
 
     public function getKey(): string
     {
-        return \md5($this->getContent());
+        return md5($this->getContent());
     }
 
     /**
