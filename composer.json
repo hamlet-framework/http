@@ -29,7 +29,8 @@
     "phpunit/phpunit": "^6 || ^7",
     "squizlabs/php_codesniffer": "@stable",
     "vimeo/psalm": "@stable",
-    "monolog/monolog": "@stable"
+    "monolog/monolog": "@stable",
+    "jakub-onderka/php-parallel-lint": "@stable"
   },
   "autoload": {
     "psr-4": {

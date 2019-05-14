@@ -6,13 +6,13 @@ php:
   - '7.1'
   - '7.2'
   - '7.3'
-  - '7.4snapshot'
 
 before_script:
   - composer clear-cache
   - composer update
 
 script:
+  - ./vendor/bin/parallel-lint src
   - ./vendor/bin/phpunit --testdox
-  - ./vendor/bin/phpcs --standard=PSR2 -n src
   - ./vendor/bin/psalm
+  - ./vendor/bin/phpcs --standard=PSR2 -n src
