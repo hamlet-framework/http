@@ -103,7 +103,13 @@ class DefaultRequest extends ServerRequest implements Request
     {
         $builder = Uri::nonValidatingBuilder();
 
-        $builder->withScheme(!empty($serverParams['HTTPS']) && $serverParams['HTTPS'] !== 'off' ? 'https' : 'http');
+        if (isset($serverParams['HTTP_X_FORWARDED_PROTO']) && $serverParams['HTTP_X_FORWARDED_PROTO'] == 'https') {
+            $builder->withScheme('https');
+        } elseif (!empty($serverParams['HTTPS']) && $serverParams['HTTPS'] !== 'off') {
+            $builder->withScheme('https');
+        } else {
+            $builder->withScheme('http');
+        }
 
         $hasPort = false;
         if (isset($serverParams['HTTP_HOST'])) {
@@ -119,8 +125,12 @@ class DefaultRequest extends ServerRequest implements Request
             $builder->withHost((string) $serverParams['SERVER_ADDR']);
         }
 
-        if (!$hasPort && isset($serverParams['SERVER_PORT'])) {
-            $builder->withPort((int) $serverParams['SERVER_PORT']);
+        if (!$hasPort) {
+            if (isset($serverParams['HTTP_X_FORWARDED_PORT'])) {
+                $builder->withPort((int) $serverParams['HTTP_X_FORWARDED_PORT']);
+            } elseif (isset($serverParams['SERVER_PORT'])) {
+                $builder->withPort((int) $serverParams['SERVER_PORT']);
+            }
         }
 
         $hasQuery = false;
