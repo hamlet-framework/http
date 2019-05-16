@@ -30,7 +30,8 @@
     "squizlabs/php_codesniffer": "@stable",
     "vimeo/psalm": "@stable",
     "monolog/monolog": "@stable",
-    "jakub-onderka/php-parallel-lint": "@stable"
+    "jakub-onderka/php-parallel-lint": "@stable",
+    "cache/array-adapter": "@stable"
   },
   "autoload": {
     "psr-4": {

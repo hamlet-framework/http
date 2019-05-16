@@ -4,5 +4,6 @@
 
 ## Todo
 
-- Add more tests
-- Add plain text response writer and use it to test different types of responses, especially codes etc.
+- Add tests for header string parsing
+- Implement If-Range for ConditionalRequest
+- Add tests for If-(un)modified since in ConditionalRequest

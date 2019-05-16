@@ -64,5 +64,11 @@ interface Request extends ServerRequestInterface
      */
     public function pathStartsWithPattern(string $pattern);
 
-    public function preconditionFulfilled(string $tag, int $lastModified): bool;
+    public function ifMatch(string $tag): bool;
+
+    public function ifNoneMatch(string $tag): bool;
+
+    public function ifModifiedSince(int $lastModified): bool;
+
+    public function ifUnmodifiedSince(int $lastModified): bool;
 }

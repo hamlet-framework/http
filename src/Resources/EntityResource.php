@@ -6,7 +6,7 @@ use Hamlet\Http\Entities\Entity;
 use Hamlet\Http\Requests\Request;
 use Hamlet\Http\Responses\Response;
 use Hamlet\Http\Responses\MethodNotAllowedResponse;
-use Hamlet\Http\Responses\OKOrNotModifiedResponse;
+use Hamlet\Http\Responses\ConditionalResponse;
 
 class EntityResource implements HttpResource
 {
@@ -29,7 +29,7 @@ class EntityResource implements HttpResource
     public function getResponse(Request $request): Response
     {
         if (in_array($request->getMethod(), $this->methods)) {
-            $response = new OKOrNotModifiedResponse($this->entity);
+            $response = new ConditionalResponse($this->entity);
             return $response;
         }
         return new MethodNotAllowedResponse(... $this->methods);

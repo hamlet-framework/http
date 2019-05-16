@@ -5,6 +5,7 @@ namespace Hamlet\Http\Requests;
 use function count;
 use function explode;
 use Hamlet\Cast\Type;
+use RuntimeException;
 use function strlen;
 use function substr;
 use function urldecode;
@@ -153,69 +154,63 @@ trait RequestTrait
         return $this->matchTokens($pathTokens, $patternTokens);
     }
 
-    /**
-     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Match
-     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
-     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
-     * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Unmodified-Since
-     * @param string $tag
-     * @param int $lastModified
-     * @return bool
-     */
-    public function preconditionFulfilled(string $tag, int $lastModified): bool
+    public function ifMatch(string $tag): bool
     {
-        $matchHeaders           = $this->getHeader('If-Match');
-        $noneMatchHeaders       = $this->getHeader('If-None-Match');
-        $modifiedSinceHeaders   = $this->getHeader('If-Modified-Since');
-        $unmodifiedSinceHeaders = $this->getHeader('If-Unmodified-Since');
-
-        if (empty($matchHeaders) && empty($noneMatchHeaders) && empty($modifiedSinceHeaders) && empty($unmodifiedSinceHeaders)) {
-            return true;
+        if (!$this->hasHeader('If-Match')) {
+            throw new RuntimeException('If-Match header not set');
         }
-
-        if (!empty($matchHeaders)) {
-            $matchHeader = $matchHeaders[0];
-            if ($matchHeader == '*') {
-                return true;
-            }
-            foreach (explode(',', $matchHeader) as $matchTag) {
-                if ($tag == trim($matchTag)) {
+        foreach ($this->getHeader('If-Match') as $value) {
+            $items = explode(',', $value);
+            foreach ($items as $item) {
+                $cleanItem = trim($item);
+                if ($cleanItem == '*' || $cleanItem == $tag) {
                     return true;
                 }
             }
         }
+        return false;
+    }
 
-        if (!empty($noneMatchHeaders)) {
-            $noneMatchHeader = $noneMatchHeaders[0];
-            if ($noneMatchHeader == '*') {
-                return true;
-            }
-            $matchFound = false;
-            foreach (explode(',', $noneMatchHeader) as $noneMatchTag) {
-                if ($tag == $noneMatchTag) {
-                    $matchFound = true;
-                    break;
+    public function ifNoneMatch(string $tag): bool
+    {
+        if (!$this->hasHeader('If-None-Match')) {
+            throw new RuntimeException('If-None-Match header not set');
+        }
+        foreach ($this->getHeader('If-None-Match') as $value) {
+            $items = explode(',', $value);
+            foreach ($items as $item) {
+                $cleanItem = trim($item);
+                if ($cleanItem == '*' || $cleanItem == $tag) {
+                    return false;
                 }
             }
-            if (!$matchFound) {
+        }
+        return true;
+    }
+
+    public function ifModifiedSince(int $lastModified): bool
+    {
+        if (!$this->hasHeader('If-Modified-Since')) {
+            throw new RuntimeException('If-Modified-Since header not set');
+        }
+        foreach ($this->getHeader('If-Modified-Since') as $value) {
+            if ($lastModified > strtotime($value)) {
                 return true;
             }
         }
+        return false;
+    }
 
-        if (!empty($modifiedSinceHeaders)) {
-            $modifiedSinceHeader = $modifiedSinceHeaders[0];
-            if ($lastModified > strtotime($modifiedSinceHeader)) {
+    public function ifUnmodifiedSince(int $lastModified): bool
+    {
+        if (!$this->hasHeader('If-Unmodified-Since')) {
+            throw new RuntimeException('If-Unmodified-Since header not set');
+        }
+        foreach ($this->getHeader('If-Unmodified-Since') as $value) {
+            if ($lastModified < strtotime($value)) {
                 return true;
             }
         }
-
-        if (!empty($unmodifiedSinceHeaders)) {
-            $unmodifiedSinceHeader = $unmodifiedSinceHeaders[0];
-            if ($lastModified < strtotime($unmodifiedSinceHeader)) {
-                return true;
-            }
-        }
-
         return false;
     }
 }
