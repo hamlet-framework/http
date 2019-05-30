@@ -63,12 +63,4 @@ interface Request extends ServerRequestInterface
      * @return array<string,string>|bool
      */
     public function pathStartsWithPattern(string $pattern);
-
-    public function ifMatch(string $tag): bool;
-
-    public function ifNoneMatch(string $tag): bool;
-
-    public function ifModifiedSince(int $lastModified): bool;
-
-    public function ifUnmodifiedSince(int $lastModified): bool;
 }

@@ -123,7 +123,9 @@ class Response
                 if ($mediaType) {
                     $writer->header('Content-Type', $mediaType);
                 }
-                $writer->writeAndEnd($cacheValue->content());
+                if ($request->getMethod() != 'HEAD') {
+                    $writer->writeAndEnd($cacheValue->content());
+                }
             } else {
                 $writer->end();
             }

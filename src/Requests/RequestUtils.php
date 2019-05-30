@@ -22,7 +22,7 @@ final class RequestUtils
      */
     public static function getLanguageCodes(RequestInterface $request): array
     {
-        return self::parseHeader($request->getHeader('Accept-Language'));
+        return self::parseAcceptLanguageHeader($request->getHeader('Accept-Language'));
     }
 
     /**
@@ -42,10 +42,11 @@ final class RequestUtils
     }
 
     /**
+     * https://stackoverflow.com/a/48300605/1646086
      * @param array<string> $headers
      * @return array<int,string>
      */
-    private static function parseHeader(array $headers)
+    public static function parseAcceptLanguageHeader(array $headers)
     {
         $weights = [];
         $reducer =
@@ -56,12 +57,14 @@ final class RequestUtils
              */
             function (array $acc, string $element): array {
                 list($l, $q) = array_merge(explode(';q=', $element), ['1']);
-                $acc[trim($l)] = (float) $q;
+                if ($l == '*' || preg_match('#^[A-Za-z]{2,4}([_-]([A-Za-z]{4}|[0-9]{3}))?([_-]([A-Za-z]{2}|[0-9]{3}))?$#', $l)) {
+                    $acc[trim($l)] = (float) $q;
+                }
                 return $acc;
             };
 
         foreach ($headers as $header) {
-            $tokens = explode(',', $header);
+            $tokens = explode(',', preg_replace('|\s+|', '', $header));
             /** @var array<string,float> $weights */
             $weights = array_reduce($tokens, $reducer, $weights);
         };

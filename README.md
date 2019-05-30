@@ -4,6 +4,8 @@
 
 ## Todo
 
-- Add tests for header string parsing
 - Implement If-Range for ConditionalRequest
-- Add tests for If-(un)modified since in ConditionalRequest
+- Add reader for date format according to https://tools.ietf.org/html/rfc2616#section-3.3
+- Add tests for HEAD requests
+- Add more tests from https://github.com/AchinthaReemal/ESBHttpComplianceTest
+- Check strong/weak validation logic

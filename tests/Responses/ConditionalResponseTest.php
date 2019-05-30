@@ -2,54 +2,320 @@
 
 namespace Hamlet\Http\Responses;
 
+use Cache\Adapter\PHPArray\ArrayCachePool;
 use Hamlet\Http\Entities\PlainTextEntity;
 use Hamlet\Http\Requests\DefaultRequest;
+use Hamlet\Http\Writers\StringResponseWriter;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\TestCase;
 
-class ConditionalResponseTest extends ResponseTestCase
+/**
+ * @todo take this documentation: https://tools.ietf.org/html/rfc7232
+ * @todo add tests that add 60 seconds of grace period
+ */
+class ConditionalResponseTest extends TestCase
 {
-    public function testNoConditionSpecified()
-    {
-        $response = new ConditionalResponse(new OKResponse(new PlainTextEntity('message')));
+    /** @var ConditionalResponse */
+    private $response;
 
-        $request = DefaultRequest::empty();
-        $payload = $this->render($response, $request);
-        Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", $payload);
+    /** @var callable */
+    private $cacheProvider;
+
+    protected function setUp()
+    {
+        $this->response = new ConditionalResponse(new OKResponse(new PlainTextEntity('content')));
+        $this->cacheProvider = $this->cacheProvider = function () {
+            return new ArrayCachePool();
+        };
     }
 
-    public function testIfMatchConditionSatisfied()
+    public function testIfRangeRequestsReturnNotImplemented()
     {
-        $response = new ConditionalResponse(new OKResponse(new PlainTextEntity('message')));
+        $request = DefaultRequest::empty()
+            ->withHeader('If-Range', '"1"')
+            ->withHeader('Range', '100-999');
 
-        $request = DefaultRequest::empty()->withHeader('If-Match', '"' . join('", "', [md5('message'), md5('a')]) . '"');
-        $payload = $this->render($response, $request);
-        Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", $payload);
+        $writer = new StringResponseWriter();
+        $this->response->output($request, $this->cacheProvider, $writer);
+
+        Assert::assertStringStartsWith("HTTP/1.1 501 Not Implemented\r\n", (string)$writer);
     }
 
-    public function testIfMatchConditionNotSatisfied()
+    public function testIfMatchReturns200OnMatchingSingleTag()
     {
-        $response = new ConditionalResponse(new OKResponse(new PlainTextEntity('message')));
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Match', '"9a0364b9e99bb480dd25e1f0284c8555"');
 
-        $request = DefaultRequest::empty()->withHeader('If-Match', '"123"');
-        $payload = $this->render($response, $request);
-        Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", $payload);
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
     }
 
-    public function testIfNoneMatchConditionSatisfied()
+    public function testIfMatchReturns200OnMatchWithMultipleTags()
     {
-        $response = new ConditionalResponse(new OKResponse(new PlainTextEntity('message')));
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Match', '"a", "b", "9a0364b9e99bb480dd25e1f0284c8555"');
 
-        $request = DefaultRequest::empty()->withHeader('If-None-Match', '"' . join('", "', [md5('message'), md5('a')]) . '"');
-        $payload = $this->render($response, $request);
-        Assert::assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", $payload);
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
     }
 
-    public function testIfNoneMatchConditionNotSatisfied()
+    public function testIfMatchReturns200OnWildcard()
     {
-        $response = new ConditionalResponse(new OKResponse(new PlainTextEntity('message')));
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Match', '"a", *, "c"');
 
-        $request = DefaultRequest::empty()->withHeader('If-None-Match', '"123"');
-        $payload = $this->render($response, $request);
-        Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", $payload);
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfMatchReturns412OnNonMatchingSingleTag()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Match', '"xx"');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfMatchReturns412OnNonMatchingMultipleTags()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Match', '"a", "b", "c"');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfNoneMatchReturns200OnNonMatchingSingleTag()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-None-Match', '"a"');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfNoneMatchReturns200OnNonMatchingMultipleTag()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-None-Match', '"a", "b", "c"');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testPutIfNoneMatchReturns412OnMatchingSingleTag()
+    {
+        $request = DefaultRequest::empty()
+            ->withMethod('PUT')
+            ->withHeader('If-None-Match', '"9a0364b9e99bb480dd25e1f0284c8555"');
+
+        $writer = new StringResponseWriter();
+        $this->response->output($request, $this->cacheProvider, $writer);
+
+        Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+    }
+
+    public function testPutIfNoneMatchReturns412OnMatchInMultipleTags()
+    {
+        $request = DefaultRequest::empty()
+            ->withMethod('PUT')
+            ->withHeader('If-None-Match', '"a", "b", "c", "9a0364b9e99bb480dd25e1f0284c8555"');
+
+        $writer = new StringResponseWriter();
+        $this->response->output($request, $this->cacheProvider, $writer);
+
+        Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+    }
+
+    public function testGetOrHeadIfNoneMatchReturns304OnMatchingSingleTag()
+    {
+        foreach (['GET', 'HEAD'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-None-Match', '"9a0364b9e99bb480dd25e1f0284c8555"');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", (string)$writer);
+        }
+    }
+
+    public function testGetOrHeadIfNoneMatchReturns304OnMatchingInMultipleTags()
+    {
+        foreach (['GET', 'HEAD'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-None-Match', '"a", "b", "c", "9a0364b9e99bb480dd25e1f0284c8555"');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfModifiedSinceIgnoredOnInvalidDateFormat()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Modified-Since', 'aa-aa-aa');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfModifiedSinceIgnoredOnNonGetOrHead()
+    {
+        foreach (['PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Modified-Since', date(DATE_RFC7231, time() + 100));
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfModifiedSinceIgnoredWhenInNoneMatchIsPresent()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Modified-Since', date(DATE_RFC7231, time() + 100))
+                ->withHeader('If-None-Match', '"a"');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfModifiedSinceReturns304IfNoModificationSinceOnGetOrHead()
+    {
+        foreach (['GET', 'HEAD'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Modified-Since', date(DATE_RFC7231, time() + 100));
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfModifiedSinceReturns300WhenModified()
+    {
+        foreach (['GET', 'HEAD'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Modified-Since', date(DATE_RFC7231, time() - 100));
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfUnmodifiedSinceIgnoredOnInvalidDateFormat()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Unmodified-Since', 'aa-aa-aa');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfUnmodifiedSinceIgnoredWhenIfMatchIsPresent()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Unmodified-Since', date(DATE_RFC7231, time() - 100))
+                ->withHeader('If-Match', '*');
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfUnmodifiedSinceReturns200WhenNotModified()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Unmodified-Since', date(DATE_RFC7231, time() + 100));
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+        }
+    }
+
+    public function testIfUnmodifiedSinceReturns412WhenModified()
+    {
+        foreach (['GET', 'HEAD', 'PUT', 'POST', 'DELETE'] as $method) {
+            $request = DefaultRequest::empty()
+                ->withMethod($method)
+                ->withHeader('If-Unmodified-Since', date(DATE_RFC7231, time() - 100));
+
+            $writer = new StringResponseWriter();
+            $this->response->output($request, $this->cacheProvider, $writer);
+
+            Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+        }
     }
 }

@@ -8,6 +8,6 @@ abstract class AbstractJsonEntity extends AbstractEntity
 
     public function getMediaType(): string
     {
-        return 'application/json;charset=UTF-8';
+        return 'application/json;charset=utf-8';
     }
 }

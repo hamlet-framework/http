@@ -7,7 +7,9 @@ use Hamlet\Http\Writers\ResponseWriter;
 
 class ConditionalResponse extends Response
 {
-    /** @var Response */
+    /**
+     * @var Response
+     */
     private $response;
 
     public function __construct(Response $response)
@@ -25,15 +27,9 @@ class ConditionalResponse extends Response
     {
         if ($this->response->entity) {
             $entry = $this->response->entity->load($cacheProvider());
-            if ($request->hasHeader('If-Match') && !$request->ifMatch($entry->tag()) ||
-                $request->hasHeader('If-Unmodified-Since') && !$request->ifUnmodifiedSince($entry->modified())) {
-                $this->withStatusCode(412)->withEmbedEntity(false);
-                parent::output($request, $cacheProvider, $writer);
-                return;
-            }
-            if ($request->hasHeader('If-None-Match') && !$request->ifNoneMatch($entry->tag()) ||
-                $request->hasHeader('If-Modified-Since') && !$request->ifModifiedSince($entry->modified())) {
-                $this->withStatusCode(304)->withEmbedEntity(false);
+            $code = $entry->validator()->evaluateCode($request);
+            if ($code == 304 || $code == 412 || $code == 501) {
+                $this->withStatusCode($code)->withEmbedEntity(false);
                 parent::output($request, $cacheProvider, $writer);
                 return;
             }

@@ -2,6 +2,8 @@
 
 namespace Hamlet\Http\Cache;
 
+use Hamlet\Http\Requests\Validator;
+
 class CacheValue
 {
     /**
@@ -79,5 +81,10 @@ class CacheValue
     public function expiry(): int
     {
         return $this->expiry;
+    }
+
+    public function validator(): Validator
+    {
+        return new Validator($this->tag, $this->modified);
     }
 }

@@ -2,10 +2,9 @@
 
 namespace Hamlet\Http\Requests;
 
+use Hamlet\Cast\Type;
 use function count;
 use function explode;
-use Hamlet\Cast\Type;
-use RuntimeException;
 use function strlen;
 use function substr;
 use function urldecode;
@@ -152,65 +151,5 @@ trait RequestTrait
         $pathTokens = explode('/', $path);
         $patternTokens = explode('/', $pattern);
         return $this->matchTokens($pathTokens, $patternTokens);
-    }
-
-    public function ifMatch(string $tag): bool
-    {
-        if (!$this->hasHeader('If-Match')) {
-            throw new RuntimeException('If-Match header not set');
-        }
-        foreach ($this->getHeader('If-Match') as $value) {
-            $items = explode(',', $value);
-            foreach ($items as $item) {
-                $cleanItem = trim($item);
-                if ($cleanItem == '*' || $cleanItem == $tag) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public function ifNoneMatch(string $tag): bool
-    {
-        if (!$this->hasHeader('If-None-Match')) {
-            throw new RuntimeException('If-None-Match header not set');
-        }
-        foreach ($this->getHeader('If-None-Match') as $value) {
-            $items = explode(',', $value);
-            foreach ($items as $item) {
-                $cleanItem = trim($item);
-                if ($cleanItem == '*' || $cleanItem == $tag) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public function ifModifiedSince(int $lastModified): bool
-    {
-        if (!$this->hasHeader('If-Modified-Since')) {
-            throw new RuntimeException('If-Modified-Since header not set');
-        }
-        foreach ($this->getHeader('If-Modified-Since') as $value) {
-            if ($lastModified > strtotime($value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function ifUnmodifiedSince(int $lastModified): bool
-    {
-        if (!$this->hasHeader('If-Unmodified-Since')) {
-            throw new RuntimeException('If-Unmodified-Since header not set');
-        }
-        foreach ($this->getHeader('If-Unmodified-Since') as $value) {
-            if ($lastModified < strtotime($value)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

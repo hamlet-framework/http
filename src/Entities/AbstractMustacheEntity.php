@@ -14,6 +14,6 @@ abstract class AbstractMustacheEntity extends AbstractTemplateEntity
 
     public function getMediaType(): string
     {
-        return 'text/html;charset=UTF-8';
+        return 'text/html;charset=utf-8';
     }
 }

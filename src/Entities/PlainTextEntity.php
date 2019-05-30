@@ -34,7 +34,7 @@ class PlainTextEntity extends AbstractEntity
      */
     public function getMediaType()
     {
-        return "text/plain";
+        return "text/plain;charset=utf-8";
     }
 
     public function getContent(): string
