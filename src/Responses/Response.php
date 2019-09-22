@@ -231,7 +231,7 @@ class Response
             508 => 'Loop Detected',
             511 => 'Network Authentication Required',
         ];
-        $reasonPhrase = (string) $phrases[$this->statusCode] ?? '';
+        $reasonPhrase = (string) ($phrases[$this->statusCode] ?? '');
         return 'HTTP/1.1 ' . $this->statusCode . ' ' . $reasonPhrase;
     }
 }

@@ -50,7 +50,7 @@ class DefaultRequest extends ServerRequest implements Request
         parent::__construct();
 
         $this->method       = (string) ($_SERVER['REQUEST_METHOD'] ?? 'GET');
-        $this->serverParams = $_SERVER ?? [];
+        $this->serverParams = $_SERVER;
         $this->cookieParams = $_COOKIE ?? [];
         $this->queryParams  = $_GET ?? [];
         $this->parsedBody   = $_POST ?? [];
