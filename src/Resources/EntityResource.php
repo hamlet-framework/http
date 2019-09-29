@@ -21,7 +21,7 @@ class EntityResource implements HttpResource
      */
     protected $methods;
 
-    public function __construct(Entity $entity, string ... $methods)
+    public function __construct(Entity $entity, string ...$methods)
     {
         $this->entity  = $entity;
         $this->methods = $methods ?: ['GET'];
