@@ -211,7 +211,7 @@ class DefaultRequest extends ServerRequest implements Request
     /**
      * @param array $files
      * @return array
-     * @psalm-return array<string,UploadedFileInterface|array>
+     * @psalm-return array<string,\Psr\Http\Message\UploadedFileInterface|array>
      * @psalm-suppress MixedArgument
      * @psalm-suppress MixedArrayAccess
      * @psalm-suppress MixedArrayOffset
