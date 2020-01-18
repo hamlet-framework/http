@@ -51,9 +51,9 @@ class DefaultRequest extends ServerRequest implements Request
 
         $this->method       = (string) ($_SERVER['REQUEST_METHOD'] ?? 'GET');
         $this->serverParams = $_SERVER;
-        $this->cookieParams = $_COOKIE ?? [];
-        $this->queryParams  = $_GET ?? [];
-        $this->parsedBody   = $_POST ?? [];
+        $this->cookieParams = $_COOKIE;
+        $this->queryParams  = $_GET;
+        $this->parsedBody   = $_POST;
         $this->path         = strtok($_SERVER['REQUEST_URI'] ?? '', '?') ?: '';
 
         $this->uriGenerator = function (): UriInterface {
@@ -75,9 +75,6 @@ class DefaultRequest extends ServerRequest implements Request
 
     public function getPath(): string
     {
-        if (!isset($this->path)) {
-            $this->path = $this->getUri()->getPath();
-        }
         return $this->path;
     }
 
