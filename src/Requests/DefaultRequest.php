@@ -82,6 +82,7 @@ class DefaultRequest extends ServerRequest implements Request
      * @param UriInterface $uri
      * @param bool $preserveHost
      * @return DefaultRequest
+     * @psalm-suppress RedundantConditionGivenDocblockType
      */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
