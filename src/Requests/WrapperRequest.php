@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
-class WrapperRequest implements Request
+final class WrapperRequest implements Request
 {
     use RequestTrait;
 

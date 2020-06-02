@@ -342,16 +342,14 @@ class DefaultRequestTest extends TestCase
      * @dataProvider server_params()
      * @param array $serverParams
      * @param string $uri
+     * @throws ReflectionException
      */
     public function test_get_uri_from_server_params(array $serverParams, string $uri)
     {
-        $proxy = new class() extends DefaultRequest
-        {
-            public function convert(array $serverParams): UriInterface
-            {
-                return parent::readUriFromServerParams($serverParams);
-            }
-        };
-        Assert::assertEquals($uri, (string) $proxy->convert($serverParams));
+        $type = new ReflectionClass(DefaultRequest::class);
+        $method = $type->getMethod('readUriFromServerParams');
+        $method->setAccessible(true);
+
+        Assert::assertEquals($uri, (string) $method->invoke(null, $serverParams));
     }
 }

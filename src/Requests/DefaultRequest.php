@@ -15,7 +15,7 @@ use function strtolower;
 use function substr;
 use function ucwords;
 
-class DefaultRequest extends ServerRequest implements Request
+final class DefaultRequest extends ServerRequest implements Request
 {
     use RequestTrait;
 
