@@ -54,6 +54,8 @@ final class RequestUtils
              * @param array<string,float> $acc
              * @param string $element
              * @return array<string,float>
+             * @psalm-suppress RedundantCondition
+             * @psalm-suppress TypeDoesNotContainType
              */
             function (array $acc, string $element): array {
                 list($l, $q) = array_merge(explode(';q=', $element), ['1']);
