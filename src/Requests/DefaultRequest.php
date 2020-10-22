@@ -44,6 +44,8 @@ final class DefaultRequest extends ServerRequest implements Request
      * @psalm-suppress MixedTypeCoercion
      * @psalm-suppress MixedArgument
      * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedPropertyTypeCoercion
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function __construct()
     {
