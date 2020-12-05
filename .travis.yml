@@ -7,14 +7,14 @@ php:
   - '7.2'
   - '7.3'
   - '7.4'
-  - '8.0'
+  - '8.0snapshot'
 
 before_script:
   - composer self-update --rollback
   - composer update
 
 script:
-  - ./vendor/bin/parallel-lint src
   - php -v | grep -q 'PHP 7.0' || ./vendor/bin/phpunit -v
   - ./vendor/bin/psalm
   - ./vendor/bin/phpcs --standard=PSR2 -n src
+  - ./vendor/bin/parallel-lint src
