@@ -17,7 +17,7 @@ class ResponseTestCase extends TestCase
 {
     private $cacheProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->cacheProvider = function () {

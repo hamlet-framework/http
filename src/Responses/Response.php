@@ -171,6 +171,9 @@ class Response
 
     protected function getStatusLine(): string
     {
+        /**
+         * @var array<int,string> $phrases
+         */
         static $phrases = [
             100 => 'Continue',
             101 => 'Switching Protocols',

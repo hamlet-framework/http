@@ -15,8 +15,9 @@
     "classmap-authoritative": true,
     "sort-packages": true
   },
+  "minimum-stability": "dev",
   "require": {
-    "php": "^7",
+    "php": "^7 || ^8",
     "ext-json": "@stable",
     "psr/log": "@stable",
     "psr/cache": "@stable",
@@ -26,7 +27,7 @@
   },
   "require-dev": {
     "hamlet-framework/http-message-spec": "@stable",
-    "phpunit/phpunit": "^6 || ^7",
+    "phpunit/phpunit": "^6 || ^7 || ^8",
     "squizlabs/php_codesniffer": "@stable",
     "vimeo/psalm": "@stable",
     "monolog/monolog": "@stable",

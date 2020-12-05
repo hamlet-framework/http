@@ -207,14 +207,12 @@ class DefaultRequestTest extends TestCase
         Assert::assertSame(12, $request->getQueryParam('id', _int()));
     }
 
-    /**
-     * @expectedException \Hamlet\Cast\CastException
-     */
     public function test_get_query_param_throws_exception_on_impossible_cast()
     {
         $request = DefaultRequest::empty()
             ->withQueryParams(['id' => '1']);
 
+        $this->expectException(\Hamlet\Cast\CastException::class);
         $request->getQueryParam('id', _class(\DateTime::class));
     }
 
@@ -235,14 +233,12 @@ class DefaultRequestTest extends TestCase
         Assert::assertSame(12, $request->getBodyParam('id', _int()));
     }
 
-    /**
-     * @expectedException \Hamlet\Cast\CastException
-     */
     public function test_get_body_param_throws_exception_on_impossible_cast()
     {
         $request = DefaultRequest::empty()
             ->withParsedBody(['id' => '1']);
 
+        $this->expectException(\Hamlet\Cast\CastException::class);
         $request->getBodyParam('id', _class(\DateTime::class));
     }
 

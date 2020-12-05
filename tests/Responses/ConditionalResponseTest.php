@@ -21,7 +21,7 @@ class ConditionalResponseTest extends TestCase
     /** @var callable */
     private $cacheProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->response = new ConditionalResponse(new OKResponse(new PlainTextEntity('content')));
         $this->cacheProvider = $this->cacheProvider = function () {
