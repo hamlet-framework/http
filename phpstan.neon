@@ -1,3 +1,0 @@
-parameters:
-  ignoreErrors:
-    - "#Property .* \\(callable|null\\) does not accept Closure\\(\\): array.#"
