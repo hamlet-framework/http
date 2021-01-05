@@ -9,21 +9,6 @@ interface Request extends ServerRequestInterface
 {
     public function getPath(): string;
 
-    /**
-     * @param string $name
-     * @return bool
-     * @deprecated
-     */
-    public function hasParameter(string $name): bool;
-
-    /**
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-     * @deprecated
-     */
-    public function parameter(string $name, $default = null);
-
     public function hasQueryParam(string $name): bool;
 
     public function hasBodyParam(string $name): bool;

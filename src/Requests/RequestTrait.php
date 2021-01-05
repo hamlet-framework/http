@@ -17,29 +17,6 @@ trait RequestTrait
 
     abstract public function getParsedBody();
 
-    public function hasParameter(string $name): bool
-    {
-        $body = $this->getParsedBody();
-        if (is_array($body) && isset($body[$name])) {
-            return true;
-        }
-        $params = $this->getQueryParams();
-        return isset($params[$name]);
-    }
-
-    public function parameter(string $name, $default = null)
-    {
-        $body = $this->getParsedBody();
-        if (is_array($body) && isset($body[$name])) {
-            return $body[$name];
-        }
-        $params = $this->getQueryParams();
-        if (isset($params[$name])) {
-            return $params[$name];
-        }
-        return $default;
-    }
-
     public function hasQueryParam(string $name): bool
     {
         $params = $this->getQueryParams();
