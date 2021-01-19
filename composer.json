@@ -15,7 +15,6 @@
     "classmap-authoritative": true,
     "sort-packages": true
   },
-  "minimum-stability": "dev",
   "require": {
     "php": "^7 || ^8",
     "ext-json": "@stable",
