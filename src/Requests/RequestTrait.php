@@ -60,6 +60,19 @@ trait RequestTrait
     }
 
     /**
+     * @template T
+     * @param string $name
+     * @param Type $type
+     * @psalm-param Type<T> $type
+     * @return mixed
+     * @psalm-return T
+     */
+    public function getTypedAttribute(string $name, Type $type)
+    {
+        return $type->cast($this->getAttribute($name));
+    }
+
+    /**
      * Compare path tokens side by side. Returns false if no match, true if match without capture,
      * and array with matched tokens if used with capturing pattern
      *

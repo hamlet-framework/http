@@ -33,6 +33,16 @@ interface Request extends ServerRequestInterface
      */
     public function getBodyParam(string $name, Type $type);
 
+    /**
+     * @template T
+     * @param string $name
+     * @param Type $type
+     * @psalm-param Type<T> $type
+     * @return mixed
+     * @psalm-return T
+     */
+    public function getTypedAttribute(string $name, Type $type);
+
     public function pathMatches(string $path): bool;
 
     /**
