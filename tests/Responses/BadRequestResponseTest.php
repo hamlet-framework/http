@@ -2,8 +2,6 @@
 
 namespace Hamlet\Http\Responses;
 
-use PHPUnit\Framework\Assert;
-
 class BadRequestResponseTest extends ResponseTestCase
 {
     public function testCodeAndMessage()
@@ -11,6 +9,6 @@ class BadRequestResponseTest extends ResponseTestCase
         $response = new BadRequestResponse();
 
         $payload = $this->render($response);
-        Assert::assertEquals("HTTP/1.1 400 Bad Request", trim($payload));
+        $this->assertEquals("HTTP/1.1 400 Bad Request", trim($payload));
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Hamlet\Http\Responses;
 
-use PHPUnit\Framework\Assert;
-
 class ForbiddenResponseTest extends ResponseTestCase
 {
     public function testCodeAndMessage()
@@ -11,6 +9,6 @@ class ForbiddenResponseTest extends ResponseTestCase
         $response = new ForbiddenResponse();
 
         $payload = $this->render($response);
-        Assert::assertEquals('HTTP/1.1 403 Forbidden', trim($payload));
+        $this->assertEquals('HTTP/1.1 403 Forbidden', trim($payload));
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Hamlet\Http\Responses;
 
-use PHPUnit\Framework\Assert;
-
 class GoneResponseTest extends ResponseTestCase
 {
     public function testCodeAndMessage()
@@ -11,6 +9,6 @@ class GoneResponseTest extends ResponseTestCase
         $response = new GoneResponse();
 
         $payload = $this->render($response);
-        Assert::assertEquals("HTTP/1.1 410 Gone", trim($payload));
+        $this->assertEquals("HTTP/1.1 410 Gone", trim($payload));
     }
 }

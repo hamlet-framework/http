@@ -9,7 +9,6 @@ use Hamlet\Http\Message\Spec\Traits\RequestTestTrait;
 use Hamlet\Http\Message\Spec\Traits\ServerRequestTestTrait;
 use Hamlet\Http\Message\Stream;
 use Hamlet\Http\Message\Uri;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
@@ -53,6 +52,6 @@ class WrapperRequestTest extends TestCase
     {
         $request = DefaultRequest::empty()->withUri(Uri::parse('http://google.com/test?x=2'));
 
-        Assert::assertSame('/test', $request->getPath());
+        $this->assertSame('/test', $request->getPath());
     }
 }

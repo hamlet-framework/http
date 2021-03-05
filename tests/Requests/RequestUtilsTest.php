@@ -2,7 +2,6 @@
 
 namespace Hamlet\Http\Requests;
 
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
 class RequestUtilsTest extends TestCase
@@ -32,6 +31,6 @@ class RequestUtilsTest extends TestCase
      */
     public function testParsingAcceptLanguageHeader(string $header, array $locales)
     {
-        Assert::assertEquals($locales, RequestUtils::parseAcceptLanguageHeader([$header]));
+        $this->assertEquals($locales, RequestUtils::parseAcceptLanguageHeader([$header]));
     }
 }

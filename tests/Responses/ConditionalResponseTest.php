@@ -6,7 +6,6 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Hamlet\Http\Entities\PlainTextEntity;
 use Hamlet\Http\Requests\DefaultRequest;
 use Hamlet\Http\Writers\StringResponseWriter;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,7 +40,7 @@ class ConditionalResponseTest extends TestCase
         $writer = new StringResponseWriter();
         $this->response->output($request, $this->cacheProvider, $writer);
 
-        Assert::assertStringStartsWith("HTTP/1.1 501 Not Implemented\r\n", (string)$writer);
+        $this->assertStringStartsWith("HTTP/1.1 501 Not Implemented\r\n", (string)$writer);
     }
 
     public function testIfMatchReturns200OnMatchingSingleTag()
@@ -54,7 +53,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -68,7 +67,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -82,7 +81,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -96,7 +95,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
         }
     }
 
@@ -110,7 +109,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
         }
     }
 
@@ -124,7 +123,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -138,7 +137,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -151,7 +150,7 @@ class ConditionalResponseTest extends TestCase
         $writer = new StringResponseWriter();
         $this->response->output($request, $this->cacheProvider, $writer);
 
-        Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+        $this->assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
     }
 
     public function testPutIfNoneMatchReturns412OnMatchInMultipleTags()
@@ -163,7 +162,7 @@ class ConditionalResponseTest extends TestCase
         $writer = new StringResponseWriter();
         $this->response->output($request, $this->cacheProvider, $writer);
 
-        Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+        $this->assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
     }
 
     public function testGetOrHeadIfNoneMatchReturns304OnMatchingSingleTag()
@@ -176,7 +175,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", (string)$writer);
         }
     }
 
@@ -190,7 +189,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", (string)$writer);
         }
     }
 
@@ -204,7 +203,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -218,7 +217,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -233,7 +232,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -247,7 +246,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 304 Not Modified\r\n", (string)$writer);
         }
     }
 
@@ -261,7 +260,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -275,7 +274,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -290,7 +289,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -304,7 +303,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 200 OK\r\n", (string)$writer);
         }
     }
 
@@ -318,7 +317,7 @@ class ConditionalResponseTest extends TestCase
             $writer = new StringResponseWriter();
             $this->response->output($request, $this->cacheProvider, $writer);
 
-            Assert::assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
+            $this->assertStringStartsWith("HTTP/1.1 412 Precondition Failed\r\n", (string)$writer);
         }
     }
 }

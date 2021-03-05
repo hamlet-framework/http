@@ -2,8 +2,6 @@
 
 namespace Hamlet\Http\Responses;
 
-use PHPUnit\Framework\Assert;
-
 class ServerErrorResponseTest extends ResponseTestCase
 {
     public function testCodeAndMessage()
@@ -11,6 +9,6 @@ class ServerErrorResponseTest extends ResponseTestCase
         $response = new ServerErrorResponse();
 
         $payload = $this->render($response);
-        Assert::assertStringStartsWith("HTTP/1.1 500 Internal Server Error\r\n", $payload);
+        $this->assertStringStartsWith("HTTP/1.1 500 Internal Server Error\r\n", $payload);
     }
 }

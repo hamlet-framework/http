@@ -2,7 +2,6 @@
 
 namespace Hamlet\Http\Requests;
 
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
@@ -28,7 +27,7 @@ class ValidatorTest extends TestCase
      */
     public function testStrongMatch(string $tag1, string $tag2, bool $strongMatch, bool $weakMatch)
     {
-        Assert::assertEquals($strongMatch, Validator::strongMatch($tag1, $tag2));
-        Assert::assertEquals($weakMatch, Validator::weakMatch($tag1, $tag2));
+        $this->assertEquals($strongMatch, Validator::strongMatch($tag1, $tag2));
+        $this->assertEquals($weakMatch, Validator::weakMatch($tag1, $tag2));
     }
 }

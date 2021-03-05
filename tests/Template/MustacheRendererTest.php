@@ -2,7 +2,6 @@
 
 namespace Hamlet\Http\Template;
 
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
 class MustacheRendererTest extends TestCase
@@ -13,6 +12,6 @@ class MustacheRendererTest extends TestCase
         $path = __DIR__ . '/hello.mustache';
         $data = ['name' => 'Vladimir'];
 
-        Assert::assertEquals('Hello, Vladimir!', trim($renderer->render($data, $path)));
+        $this->assertEquals('Hello, Vladimir!', trim($renderer->render($data, $path)));
     }
 }

@@ -8,7 +8,6 @@ use Hamlet\Http\Message\Spec\Traits\RequestTestTrait;
 use Hamlet\Http\Message\Spec\Traits\ServerRequestTestTrait;
 use Hamlet\Http\Message\Stream;
 use Hamlet\Http\Message\Uri;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
@@ -54,14 +53,14 @@ class DefaultRequestTest extends TestCase
 
     public function test_defaults()
     {
-        Assert::assertTrue(true);
+        $this->assertTrue(true);
     }
 
     public function test_path_changes_after_uri_set()
     {
         $request = DefaultRequest::empty()->withUri(Uri::parse('http://google.com/test?x=2'));
 
-        Assert::assertSame('/test', $request->getPath());
+        $this->assertSame('/test', $request->getPath());
     }
 
     /**
@@ -187,7 +186,7 @@ class DefaultRequestTest extends TestCase
         $type = new ReflectionClass(DefaultRequest::class);
         $method = $type->getMethod('readUploadedFilesFromFileParams');
         $method->setAccessible(true);
-        Assert::assertTrue(true);
+        $this->assertTrue(true);
     }
 
     public function test_has_query_param()
@@ -195,8 +194,8 @@ class DefaultRequestTest extends TestCase
         $request = DefaultRequest::empty()
             ->withQueryParams(['id' => '12']);
 
-        Assert::assertTrue($request->hasQueryParam('id'));
-        Assert::assertFalse($request->hasQueryParam('name'));
+        $this->assertTrue($request->hasQueryParam('id'));
+        $this->assertFalse($request->hasQueryParam('name'));
     }
 
     public function test_get_query_param_casts_value()
@@ -204,7 +203,7 @@ class DefaultRequestTest extends TestCase
         $request = DefaultRequest::empty()
             ->withQueryParams(['id' => '12']);
 
-        Assert::assertSame(12, $request->getQueryParam('id', _int()));
+        $this->assertSame(12, $request->getQueryParam('id', _int()));
     }
 
     public function test_get_query_param_throws_exception_on_impossible_cast()
@@ -221,8 +220,8 @@ class DefaultRequestTest extends TestCase
         $request = DefaultRequest::empty()
             ->withParsedBody(['id' => '12']);
 
-        Assert::assertTrue($request->hasBodyParam('id'));
-        Assert::assertFalse($request->hasBodyParam('name'));
+        $this->assertTrue($request->hasBodyParam('id'));
+        $this->assertFalse($request->hasBodyParam('name'));
     }
 
     public function test_get_body_param_casts_value()
@@ -230,7 +229,7 @@ class DefaultRequestTest extends TestCase
         $request = DefaultRequest::empty()
             ->withParsedBody(['id' => '12']);
 
-        Assert::assertSame(12, $request->getBodyParam('id', _int()));
+        $this->assertSame(12, $request->getBodyParam('id', _int()));
     }
 
     public function test_get_body_param_throws_exception_on_impossible_cast()
@@ -346,6 +345,6 @@ class DefaultRequestTest extends TestCase
         $method = $type->getMethod('readUriFromServerParams');
         $method->setAccessible(true);
 
-        Assert::assertEquals($uri, (string) $method->invoke(null, $serverParams));
+        $this->assertEquals($uri, (string) $method->invoke(null, $serverParams));
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Hamlet\Http\Responses;
 
-use PHPUnit\Framework\Assert;
-
 class UnauthorizedResponseTest extends ResponseTestCase
 {
     public function testCodeAndMessage()
@@ -11,6 +9,6 @@ class UnauthorizedResponseTest extends ResponseTestCase
         $response = new UnauthorizedResponse();
 
         $payload = $this->render($response);
-        Assert::assertEquals('HTTP/1.1 401 Unauthorized', trim($payload));
+        $this->assertEquals('HTTP/1.1 401 Unauthorized', trim($payload));
     }
 }
