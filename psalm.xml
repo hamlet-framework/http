@@ -14,5 +14,6 @@
     <issueHandlers>
         <RedundantCast errorLevel="suppress"/>
         <RedundantCastGivenDocblockType errorLevel="suppress"/>
+        <UnnecessaryVarAnnotation errorLevel="suppress"/>
     </issueHandlers>
 </psalm>
