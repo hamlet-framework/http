@@ -32,7 +32,10 @@ final class RequestUtils
     public static function getRemoteIp(ServerRequestInterface $request)
     {
         if ($request->hasHeader('X-Forwarded-For')) {
-            return $request->getHeader('X-Forwarded-For')[0];
+            $header = $request->getHeader('X-Forwarded-For');
+            if (isset($header[0])) {
+                return $header[0];
+            }
         }
         $serverParams = $request->getServerParams();
         if (isset($serverParams['REMOTE_ADDR'])) {
@@ -54,7 +57,6 @@ final class RequestUtils
              * @param array<string,float> $acc
              * @param string $element
              * @return array<string,float>
-             * @psalm-suppress RedundantCondition
              * @psalm-suppress TypeDoesNotContainType
              */
             function (array $acc, string $element): array {

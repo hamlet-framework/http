@@ -6,6 +6,7 @@ use Hamlet\Http\Cache\CacheValue;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use RuntimeException;
+use function Hamlet\Cast\_class;
 
 abstract class AbstractEntity implements Entity
 {
@@ -40,13 +41,7 @@ abstract class AbstractEntity implements Entity
         }
 
         if ($cacheItem->isHit()) {
-            /** @psalm-suppress MixedAssignment */
-            $value = $cacheItem->get();
-            assert($value instanceof CacheValue);
-            /** @psalm-suppress RedundantConditionGivenDocblockType */
-            if ($value instanceof CacheValue) {
-                $this->cacheValue = $value;
-            }
+            $this->cacheValue = _class(CacheValue::class)->cast($cacheItem->get());
         }
 
         $now = time();

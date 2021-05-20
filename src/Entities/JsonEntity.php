@@ -10,13 +10,19 @@ use function md5;
 
 class JsonEntity extends AbstractJsonEntity
 {
-    /** @var mixed */
+    /**
+     * @var mixed
+     */
     private $data;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $content = null;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     private $key = null;
 
     /**

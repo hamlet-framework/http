@@ -41,9 +41,7 @@ final class DefaultRequest extends ServerRequest implements Request
     ];
 
     /**
-     * @psalm-suppress MixedTypeCoercion
      * @psalm-suppress MixedArgument
-     * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedPropertyTypeCoercion
      * @psalm-suppress MixedArgumentTypeCoercion
      */
@@ -217,8 +215,6 @@ final class DefaultRequest extends ServerRequest implements Request
      * @psalm-suppress MixedArrayOffset
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedReturnTypeCoercion
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
      */
     protected static function readUploadedFilesFromFileParams(array $files): array
     {
