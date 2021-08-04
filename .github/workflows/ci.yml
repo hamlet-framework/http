@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: composer update
       - run: vendor/bin/parallel-lint src
-      - run: vendor/bin/phpcs --standard=PSR2 -n src
+      - run: vendor/bin/phpcs -n src
   unit-tests-static-analysis:
     name: Check PHP syntax
     runs-on: ubuntu-latest
