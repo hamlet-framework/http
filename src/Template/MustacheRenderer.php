@@ -27,17 +27,7 @@ class MustacheRenderer implements TemplateRenderer
 
     public function render(mixed $data, string $path): string
     {
-        $key = md5(serialize($data));
-        $fileName = sys_get_temp_dir() . '/__mustache_rendered_' . $key;
-        if (!file_exists($fileName)) {
-            $content = $this->load($path)->render($data);
-            $tempFileName = tempnam(sys_get_temp_dir(), '__mustache_temp_');
-            file_put_contents($tempFileName, $content);
-            chmod($tempFileName, 0666);
-            rename($tempFileName, $fileName);
-            return $content;
-        }
-        return file_get_contents($fileName);
+        return $this->load($path)->render($data);
     }
 
     private function load(string $path): Mustache_Template
