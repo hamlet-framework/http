@@ -4,10 +4,7 @@ namespace Hamlet\Http\Entities;
 
 abstract class AbstractJsonEntity extends AbstractEntity
 {
-    /**
-     * @return mixed
-     */
-    abstract protected function getData();
+    abstract protected function getData(): mixed;
 
     public function getMediaType(): string
     {

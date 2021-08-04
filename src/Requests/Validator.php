@@ -9,15 +9,9 @@ use RuntimeException;
  */
 class Validator
 {
-    /**
-     * @var string
-     */
-    private $entityTag;
+    private string $entityTag;
 
-    /**
-     * @var int
-     */
-    private $lastModifiedTime;
+    private int $lastModifiedTime;
 
     public static function strongMatch(string $entityTag1, string $entityTag2): bool
     {
@@ -47,9 +41,6 @@ class Validator
 
     /**
      * @see https://tools.ietf.org/html/rfc7232#section-3.1
-     *
-     * @param Request $request
-     * @return bool
      */
     public function matchConditionSatisfied(Request $request): bool
     {
@@ -70,9 +61,6 @@ class Validator
 
     /**
      * @see https://tools.ietf.org/html/rfc7232#section-3.2
-     *
-     * @param Request $request
-     * @return bool
      */
     public function noneMatchConditionSatisfied(Request $request): bool
     {
@@ -121,11 +109,8 @@ class Validator
 
     /**
      * Implementation of precedence algorithm https://tools.ietf.org/html/rfc7232#section-6
-     *
-     * @param Request $request
-     * @return int|null
      */
-    public function evaluateCode(Request $request)
+    public function evaluateCode(Request $request): ?int
     {
         if ($request->hasHeader('If-Match')) {
             if (!$this->matchConditionSatisfied($request)) {

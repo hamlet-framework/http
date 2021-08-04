@@ -7,27 +7,19 @@ use RuntimeException;
 
 class ResponseBuilder
 {
-    /**
-     * @var int|null
-     */
-    private $statusCode;
+    private ?int $statusCode = null;
+
+    private ?Entity $entity = null;
 
     /**
-     * @var Entity|null
+     * @var array<string,array<string>>
      */
-    private $entity;
+    private array $headers = [];
 
     /**
-     * @var array
-     * @psalm-var array<string,array<string>>
+     * @var array<Cookie>
      */
-    private $headers = [];
-
-    /**
-     * @var Cookie[]
-     * @psalm-var array<Cookie>
-     */
-    private $cookies = [];
+    private array $cookies = [];
 
     private function __construct()
     {
@@ -61,7 +53,6 @@ class ResponseBuilder
         $this->cookies[] = $cookie;
         return $this;
     }
-
 
     public function build(): Response
     {

@@ -17,19 +17,14 @@ final class RequestUtils
     }
 
     /**
-     * @param RequestInterface $request
-     * @return string[]
+     * @return array<string>
      */
     public static function getLanguageCodes(RequestInterface $request): array
     {
         return self::parseAcceptLanguageHeader($request->getHeader('Accept-Language'));
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return string|null
-     */
-    public static function getRemoteIp(ServerRequestInterface $request)
+    public static function getRemoteIp(ServerRequestInterface $request): ?string
     {
         if ($request->hasHeader('X-Forwarded-For')) {
             $header = $request->getHeader('X-Forwarded-For');
@@ -49,7 +44,7 @@ final class RequestUtils
      * @param array<string> $headers
      * @return array<int,string>
      */
-    public static function parseAcceptLanguageHeader(array $headers)
+    public static function parseAcceptLanguageHeader(array $headers): array
     {
         $weights = [];
         $reducer =

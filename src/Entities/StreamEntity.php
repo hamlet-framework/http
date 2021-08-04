@@ -7,20 +7,9 @@ use function md5;
 
 class StreamEntity extends AbstractEntity
 {
-    /**
-     * @var StreamInterface
-     */
-    private $stream;
+    private ?string $content = null;
 
-    /**
-     * @var string|null
-     */
-    private $content = null;
-
-    public function __construct(StreamInterface $stream)
-    {
-        $this->stream = $stream;
-    }
+    public function __construct(private StreamInterface $stream) {}
 
     public function getContent(): string
     {
@@ -36,10 +25,7 @@ class StreamEntity extends AbstractEntity
         return md5($this->getContent());
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMediaType()
+    public function getMediaType(): ?string
     {
         return null;
     }

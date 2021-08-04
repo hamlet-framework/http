@@ -10,22 +10,14 @@ use function Hamlet\Cast\_class;
 
 abstract class AbstractEntity implements Entity
 {
-    /**
-     * @var CacheValue|null
-     */
-    private $cacheValue = null;
+    private ?CacheValue $cacheValue = null;
 
-    /**
-     * @return string|null
-     */
-    public function getContentLanguage()
+    public function getContentLanguage(): ?string
     {
         return null;
     }
 
     /**
-     * @param CacheItemPoolInterface $cache
-     * @return CacheValue
      * @psalm-suppress InvalidCatch
      */
     public function load(CacheItemPoolInterface $cache): CacheValue

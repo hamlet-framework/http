@@ -11,31 +11,16 @@ final class WrapperRequest implements Request
 {
     use RequestTrait;
 
-    /**
-     * @var ServerRequestInterface
-     */
-    private $serverRequest;
+    private ?string $path = null;
 
-    /**
-     * @var string|null
-     */
-    private $path = null;
-
-    public function __construct(ServerRequestInterface $serverRequest)
-    {
-        $this->serverRequest = $serverRequest;
-    }
+    public function __construct(private ServerRequestInterface $serverRequest) {}
 
     public function getProtocolVersion(): string
     {
         return $this->serverRequest->getProtocolVersion();
     }
 
-    /**
-     * @param string $version
-     * @return static
-     */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): static
     {
         return new self($this->serverRequest->withProtocolVersion($version));
     }

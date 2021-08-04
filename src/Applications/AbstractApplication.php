@@ -15,21 +15,14 @@ abstract class AbstractApplication
     public function run(Request $request): Response
     {
         $resource = $this->findResource($request);
-        $response = $resource->getResponse($request);
-        return $response;
+        return $resource->getResponse($request);
     }
 
     abstract protected function findResource(Request $request): HttpResource;
 
     abstract protected function getCache(Request $request): CacheItemPoolInterface;
 
-    /**
-     * @param Request $request
-     * @param Response $response
-     * @param ResponseWriter $writer
-     * @return void
-     */
-    public function output(Request $request, Response $response, ResponseWriter $writer)
+    public function output(Request $request, Response $response, ResponseWriter $writer): void
     {
         $cacheProvider = function () use ($request): CacheItemPoolInterface {
             return $this->getCache($request);

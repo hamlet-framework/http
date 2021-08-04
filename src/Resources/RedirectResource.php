@@ -9,13 +9,7 @@ use Hamlet\Http\Responses\TemporaryRedirectResponse;
 
 class RedirectResource implements HttpResource
 {
-    /** @var string */
-    protected $url;
-
-    public function __construct(string $url)
-    {
-        $this->url = $url;
-    }
+    public function __construct(protected string $url) {}
 
     public function getResponse(Request $request): Response
     {

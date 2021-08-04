@@ -6,20 +6,9 @@ use function md5;
 
 class PlainTextEntity extends AbstractEntity
 {
-    /**
-     * @var string
-     */
-    private $data;
+    private ?string $key = null;
 
-    /**
-     * @var string|null
-     */
-    private $key = null;
-
-    public function __construct(string $data)
-    {
-        $this->data = $data;
-    }
+    public function __construct(private string $data) {}
 
     public function getKey(): string
     {
@@ -29,10 +18,7 @@ class PlainTextEntity extends AbstractEntity
         return $this->key;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMediaType()
+    public function getMediaType(): ?string
     {
         return "text/plain;charset=utf-8";
     }

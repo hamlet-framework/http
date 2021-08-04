@@ -6,46 +6,19 @@ use Hamlet\Http\Requests\Validator;
 
 class CacheValue
 {
-    /**
-     * @var string
-     */
-    private $content;
+    private string $tag;
+    private string $digest;
+    private int $length;
 
-    /**
-     * @var string
-     */
-    private $tag;
-
-    /**
-     * @var string
-     */
-    private $digest;
-
-    /**
-     * @var int
-     */
-    private $length;
-
-    /**
-     * @var int
-     */
-    private $modified;
-
-    /**
-     * @var int
-     */
-    private $expiry;
-
-    public function __construct(string $content, int $modified, int $expiry)
-    {
+    public function __construct(
+        private string $content,
+        private int $modified,
+        private int $expiry
+    ) {
         $md5 = md5($content);
-
-        $this->content  = $content;
         $this->tag      = '"' . $md5 . '"';
         $this->digest   = base64_encode(pack('H*', $md5));
         $this->length   = strlen($content);
-        $this->modified = $modified;
-        $this->expiry   = $expiry;
     }
 
     public function extendExpiry(int $expires): CacheValue

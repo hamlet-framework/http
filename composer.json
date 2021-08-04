@@ -16,7 +16,7 @@
     "sort-packages": true
   },
   "require": {
-    "php": "^7 || ^8",
+    "php": "^8",
     "ext-json": "@stable",
     "psr/log": "@stable",
     "psr/cache": "@stable",
@@ -26,13 +26,12 @@
   },
   "require-dev": {
     "hamlet-framework/http-message-spec": "@stable",
-    "phpunit/phpunit": "^6 || ^7 || ^8 || ^9",
+    "phpunit/phpunit": "^9",
     "squizlabs/php_codesniffer": "@stable",
     "vimeo/psalm": "@stable",
     "monolog/monolog": "@stable",
     "php-parallel-lint/php-parallel-lint": "@stable",
-    "cache/array-adapter": "@stable",
-    "symfony/polyfill-mbstring": "<=1.20.0"
+    "cache/array-adapter": "@stable"
   },
   "autoload": {
     "psr-4": {

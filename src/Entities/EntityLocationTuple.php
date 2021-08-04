@@ -4,21 +4,10 @@ namespace Hamlet\Http\Entities;
 
 class EntityLocationTuple
 {
-    /**
-     * @var string
-     */
-    protected $location;
-
-    /**
-     * @var Entity
-     */
-    protected $entity;
-
-    public function __construct(string $location, Entity $entity)
-    {
-        $this->location = $location;
-        $this->entity = $entity;
-    }
+    public function __construct(
+        protected string $location,
+        protected Entity $entity
+    ) {}
 
     public function getLocation(): string
     {

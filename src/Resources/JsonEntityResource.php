@@ -6,12 +6,7 @@ use Hamlet\Http\Entities\JsonEntity;
 
 class JsonEntityResource extends EntityResource
 {
-    /**
-     * JsonEntityResource constructor.
-     * @param mixed $value
-     * @param string ...$methods
-     */
-    public function __construct($value, string ...$methods)
+    public function __construct(mixed $value, string ...$methods)
     {
         parent::__construct(new JsonEntity($value), ...$methods);
     }

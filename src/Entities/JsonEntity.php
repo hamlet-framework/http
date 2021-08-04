@@ -10,32 +10,14 @@ use function md5;
 
 class JsonEntity extends AbstractJsonEntity
 {
-    /**
-     * @var mixed
-     */
-    private $data;
 
-    /**
-     * @var string|null
-     */
-    private $content = null;
+    private ?string $content = null;
+    private ?string $key = null;
 
-    /**
-     * @var string|null
-     */
-    private $key = null;
-
-    /**
-     * @param mixed $data
-     */
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
+    public function __construct(private mixed $data) {}
 
     /**
      * Get the entity key, 304 response needs a proper key value
-     * @return string
      */
     public function getKey(): string
     {
@@ -57,11 +39,7 @@ class JsonEntity extends AbstractJsonEntity
         return $this->content;
     }
 
-    /**
-     * Get entity data
-     * @return mixed
-     */
-    protected function getData()
+    protected function getData(): mixed
     {
         return $this->data;
     }

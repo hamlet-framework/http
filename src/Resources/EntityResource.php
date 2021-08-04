@@ -12,26 +12,19 @@ use Hamlet\Http\Responses\Response;
 class EntityResource implements HttpResource
 {
     /**
-     * @var Entity
+     * @var array<string>
      */
-    protected $entity;
+    protected array $methods;
 
-    /**
-     * @var string[]
-     */
-    protected $methods;
-
-    public function __construct(Entity $entity, string ...$methods)
+    public function __construct(protected Entity $entity, string ...$methods)
     {
-        $this->entity  = $entity;
         $this->methods = $methods ?: ['GET'];
     }
 
     public function getResponse(Request $request): Response
     {
         if (in_array($request->getMethod(), $this->methods)) {
-            $response = new ConditionalResponse(new OKResponse($this->entity));
-            return $response;
+            return new ConditionalResponse(new OKResponse($this->entity));
         }
         return new MethodNotAllowedResponse(... $this->methods);
     }

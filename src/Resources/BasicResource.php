@@ -7,15 +7,7 @@ use Hamlet\Http\Responses\Response;
 
 class BasicResource implements HttpResource
 {
-    /**
-     * @var Response
-     */
-    protected $response;
-
-    public function __construct(Response $response)
-    {
-        $this->response = $response;
-    }
+    public function __construct(protected Response $response) {}
 
     public function getResponse(Request $request): Response
     {

@@ -32,10 +32,8 @@ trait RequestTrait
     /**
      * @template T
      * @param string $name
-     * @param Type $type
-     * @psalm-param Type<T> $type
-     * @return mixed
-     * @psalm-return T
+     * @param Type<T> $type
+     * @return T
      */
     public function getQueryParam(string $name, Type $type)
     {
@@ -47,10 +45,8 @@ trait RequestTrait
     /**
      * @template T
      * @param string $name
-     * @param Type $type
-     * @psalm-param Type<T> $type
-     * @return mixed
-     * @psalm-return T
+     * @param Type<T> $type
+     * @return T
      */
     public function getBodyParam(string $name, Type $type)
     {
@@ -62,10 +58,8 @@ trait RequestTrait
     /**
      * @template T
      * @param string $name
-     * @param Type $type
-     * @psalm-param Type<T> $type
-     * @return mixed
-     * @psalm-return T
+     * @param Type<T> $type
+     * @return T
      */
     public function getTypedAttribute(string $name, Type $type)
     {
@@ -76,12 +70,11 @@ trait RequestTrait
      * Compare path tokens side by side. Returns false if no match, true if match without capture,
      * and array with matched tokens if used with capturing pattern
      *
-     * @param string[] $pathTokens
-     * @param string[] $patternTokens
-     *
+     * @param array<string> $pathTokens
+     * @param array<string> $patternTokens
      * @return array<string,string>|bool
      */
-    protected function matchTokens(array $pathTokens, array $patternTokens)
+    protected function matchTokens(array $pathTokens, array $patternTokens): array|bool
     {
         $matches = [];
         for ($i = 1; $i < count($patternTokens); $i++) {
@@ -111,10 +104,9 @@ trait RequestTrait
     }
 
     /**
-     * @param string $pattern
      * @return array<string,string>|bool
      */
-    public function pathMatchesPattern(string $pattern)
+    public function pathMatchesPattern(string $pattern): array|bool
     {
         $path = $this->getPath();
         $pathTokens = explode('/', $path);
@@ -132,10 +124,9 @@ trait RequestTrait
     }
 
     /**
-     * @param string $pattern
      * @return array<string,string>|bool
      */
-    public function pathStartsWithPattern(string $pattern)
+    public function pathStartsWithPattern(string $pattern): array|bool
     {
         $path = $this->getPath();
         $pathTokens = explode('/', $path);

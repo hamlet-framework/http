@@ -8,15 +8,12 @@ use Mustache_Template;
 
 class MustacheRenderer implements TemplateRenderer
 {
-    /**
-     * @var Mustache_Engine
-     */
-    private $engine;
+    private Mustache_Engine $engine;
 
     /**
-     * @var Mustache_Template[]
+     * @var array<Mustache_Template>
      */
-    private $templates = [];
+    private array $templates = [];
 
     public function __construct()
     {
@@ -28,12 +25,7 @@ class MustacheRenderer implements TemplateRenderer
         ]);
     }
 
-    /**
-     * @param mixed $data
-     * @param string $path
-     * @return string
-     */
-    public function render($data, string $path): string
+    public function render(mixed $data, string $path): string
     {
         return $this->load($path)->render($data);
     }

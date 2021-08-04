@@ -16,46 +16,38 @@ interface Request extends ServerRequestInterface
     /**
      * @template T
      * @param string $name
-     * @param Type $type
-     * @psalm-param Type<T> $type
-     * @return mixed
-     * @psalm-return T
+     * @param Type<T> $type
+     * @return T
      */
     public function getQueryParam(string $name, Type $type);
 
     /**
      * @template T
      * @param string $name
-     * @param Type $type
-     * @psalm-param Type<T> $type
-     * @return mixed
-     * @psalm-return T
+     * @param Type<T> $type
+     * @return T
      */
     public function getBodyParam(string $name, Type $type);
 
     /**
      * @template T
      * @param string $name
-     * @param Type $type
-     * @psalm-param Type<T> $type
-     * @return mixed
-     * @psalm-return T
+     * @param Type<T> $type
+     * @return T
      */
     public function getTypedAttribute(string $name, Type $type);
 
     public function pathMatches(string $path): bool;
 
     /**
-     * @param string $pattern
      * @return array<string,string>|bool
      */
-    public function pathMatchesPattern(string $pattern);
+    public function pathMatchesPattern(string $pattern): array|bool;
 
     public function pathStartsWith(string $prefix): bool;
 
     /**
-     * @param string $pattern
      * @return array<string,string>|bool
      */
-    public function pathStartsWithPattern(string $pattern);
+    public function pathStartsWithPattern(string $pattern): array|bool;
 }

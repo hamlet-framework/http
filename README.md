@@ -1,6 +1,10 @@
 # Hamlet / HTTP
 
-[![Build Status](https://travis-ci.org/hamlet-framework/http.svg?branch=master)](https://travis-ci.org/hamlet-framework/http)
+![CI Status](https://github.com/hamlet-framework/type/workflows/CI/badge.svg?branch=master&event=push)
+[![Packagist](https://img.shields.io/packagist/v/hamlet-framework/http.svg)](https://packagist.org/packages/hamlet-framework/http)
+[![Packagist](https://img.shields.io/packagist/dt/hamlet-framework/http.svg)](https://packagist.org/packages/hamlet-framework/http)
+[![Coverage Status](https://coveralls.io/repos/github/hamlet-framework/http/badge.svg?branch=master)](https://coveralls.io/github/hamlet-framework/http?branch=master)
+![Psalm coverage](https://shepherd.dev/github/hamlet-framework/http/coverage.svg?)
 
 ## Todo
 

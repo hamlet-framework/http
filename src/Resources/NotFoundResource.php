@@ -10,15 +10,7 @@ use Hamlet\Http\Responses\Response;
 
 class NotFoundResource implements HttpResource
 {
-    /**
-     * @var Entity|null
-     */
-    protected $entity;
-
-    public function __construct(Entity $entity = null)
-    {
-        $this->entity = $entity;
-    }
+    public function __construct(protected ?Entity $entity = null) {}
 
     public function getResponse(Request $request): Response
     {

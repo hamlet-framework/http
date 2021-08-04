@@ -4,24 +4,9 @@ namespace Hamlet\Http\Writers;
 
 trait ResponseWriterTrait
 {
-    /**
-     * @param string $key
-     * @param string $value
-     * @return void
-     */
-    abstract public function header(string $key, string $value);
+    abstract public function header(string $key, string $value): void;
 
-    /**
-     * @param string $name
-     * @param string $value
-     * @param int $expires
-     * @param string $path
-     * @param string $domain
-     * @param bool $secure
-     * @param bool $httpOnly
-     * @return void
-     */
-    public function cookie(string $name, string $value, int $expires, string $path, string $domain = '', bool $secure = false, bool $httpOnly = false)
+    public function cookie(string $name, string $value, int $expires, string $path, string $domain = '', bool $secure = false, bool $httpOnly = false): void
     {
         $header = urlencode($name) . '=' . urlencode($value) . '; Path=' . $path;
         if ($expires) {

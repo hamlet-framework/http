@@ -4,57 +4,30 @@ namespace Hamlet\Http\Writers;
 
 class DefaultResponseWriter implements ResponseWriter
 {
-    /**
-     * @param int $code
-     * @param string|null $line
-     * @return void
-     */
-    public function status(int $code, string $line = null)
+    public function status(int $code, string $line = null): void
     {
         if ($line !== null) {
             header($line);
         }
     }
 
-    /**
-     * @param string $key
-     * @param string $value
-     * @return void
-     */
-    public function header(string $key, string $value)
+    public function header(string $key, string $value): void
     {
         header($key . ': ' . $value);
     }
 
-    /**
-     * @param string $payload
-     * @return void
-     */
-    public function writeAndEnd(string $payload)
+    public function writeAndEnd(string $payload): void
     {
         echo $payload;
         exit;
     }
 
-    /**
-     * @return void
-     */
-    public function end()
+    public function end(): void
     {
         exit;
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     * @param int $expires
-     * @param string $path
-     * @param string $domain
-     * @param bool $secure
-     * @param bool $httpOnly
-     * @return void
-     */
-    public function cookie(string $name, string $value, int $expires, string $path, string $domain = '', bool $secure = false, bool $httpOnly = false)
+    public function cookie(string $name, string $value, int $expires, string $path, string $domain = '', bool $secure = false, bool $httpOnly = false): void
     {
         setcookie($name, $value, $expires, $path, $domain, $secure, $httpOnly);
     }
